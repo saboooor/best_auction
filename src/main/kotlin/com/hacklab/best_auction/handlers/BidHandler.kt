@@ -73,13 +73,14 @@ class BidHandler(private val plugin: Main) : Listener {
             event.isCancelled = true
             handleBidInput(player, message)
         }
-        // buyoutとキャンセル処理はコマンドに移行したので削除
+        // Buyout and cancellation handling was removed because it moved to commands
     }
     
     private fun handleBidInput(player: Player, input: String) {
         val session = activeBids.remove(player.uniqueId) ?: return
         
-        if (input.equals("cancel", ignoreCase = true) || input.equals("キャンセル", ignoreCase = true)) {
+        // Preserve the legacy Japanese cancellation alias.
+        if (input.equals("cancel", ignoreCase = true) || input.equals("\u30ad\u30e3\u30f3\u30bb\u30eb", ignoreCase = true)) {
             player.sendMessage("§c${plugin.langManager.getMessage(player, "auction.bid_cancelled")}")
             return
         }

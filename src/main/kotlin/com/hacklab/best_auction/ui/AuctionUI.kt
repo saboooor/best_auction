@@ -35,54 +35,7 @@ class AuctionUI : Listener {
         }
 
         fun openMainUI(player: Player, plugin: Main) {
-            val title = plugin.langManager.getMessage(player, "ui.auction_house")
-            val inventory = Bukkit.createInventory(null, 54, "§6$title")
-
-            // === Row 1 (slots 0-5): カテゴリ選択ボタン ===
-            AuctionCategory.values().forEachIndexed { index, cat ->
-                val item = createCategoryItem(cat, plugin, player)
-                inventory.setItem(index, item)
-            }
-
-            // === Row 6 (slots 45-53): 操作メニュー（最下段） ===
-            // Personal: slots 45-47
-            val myListingsItem = ItemStack(Material.LECTERN)
-            val myListingsMeta = myListingsItem.itemMeta!!
-            myListingsMeta.setDisplayName("§e" + plugin.langManager.getMessage(player, "ui.your_auctions"))
-            myListingsMeta.lore = listOf("§7" + plugin.langManager.getMessage(player, "ui.click_to_view_listings"))
-            myListingsItem.itemMeta = myListingsMeta
-            inventory.setItem(45, myListingsItem)
-
-            val myBidsItem = ItemStack(Material.GOLDEN_SWORD)
-            val myBidsMeta = myBidsItem.itemMeta!!
-            myBidsMeta.setDisplayName("§e" + plugin.langManager.getMessage(player, "ui.my_bids"))
-            myBidsMeta.lore = listOf("§7" + plugin.langManager.getMessage(player, "ui.click_to_view_bids"))
-            myBidsItem.itemMeta = myBidsMeta
-            inventory.setItem(46, myBidsItem)
-
-            val mailItem = ItemStack(Material.ENDER_CHEST)
-            val mailMeta = mailItem.itemMeta!!
-            mailMeta.setDisplayName("§e" + plugin.langManager.getMessage(player, "ui.mailbox"))
-            mailMeta.lore = listOf("§7" + plugin.langManager.getMessage(player, "ui.click_to_open_mail"))
-            mailItem.itemMeta = mailMeta
-            inventory.setItem(47, mailItem)
-
-            // Utility: slots 52-53
-            val searchItem = ItemStack(Material.SPYGLASS)
-            val searchMeta = searchItem.itemMeta!!
-            searchMeta.setDisplayName("§e" + plugin.langManager.getMessage(player, "ui.search"))
-            searchMeta.lore = listOf("§7" + plugin.langManager.getMessage(player, "ui.click_to_search"))
-            searchItem.itemMeta = searchMeta
-            inventory.setItem(52, searchItem)
-
-            val settingsItem = ItemStack(Material.WRITABLE_BOOK)
-            val settingsMeta = settingsItem.itemMeta!!
-            settingsMeta.setDisplayName("§e" + plugin.langManager.getMessage(player, "ui.settings"))
-            settingsMeta.lore = listOf("§7" + plugin.langManager.getMessage(player, "ui.click_to_settings"))
-            settingsItem.itemMeta = settingsMeta
-            inventory.setItem(53, settingsItem)
-
-            player.openInventory(inventory)
+            AuctionMenu.open(player, plugin)
         }
 
         fun openCategoryUI(player: Player, plugin: Main, category: AuctionCategory, page: Int = 0) {
@@ -131,18 +84,6 @@ class AuctionUI : Listener {
             player.openInventory(inventory)
         }
 
-        private fun createCategoryItem(category: AuctionCategory, plugin: Main, player: Player): ItemStack {
-            val item = ItemStack(category.material)
-            val meta = item.itemMeta!!
-            meta.setDisplayName("§e${getCategoryDisplayName(category, plugin, player)}")
-            meta.lore = listOf(
-                "§7" + plugin.langManager.getMessage(player, "ui.click_to_browse"),
-                "§7" + plugin.langManager.getMessage(player, "ui.category_items_available")
-            )
-            item.itemMeta = meta
-            return item
-        }
-
         fun getCategoryDisplayName(category: AuctionCategory, plugin: Main, player: Player): String {
             return when (category) {
                 AuctionCategory.ALL -> plugin.langManager.getMessage(player, "category.all")
@@ -159,11 +100,11 @@ class AuctionUI : Listener {
             val originalMeta = auctionItem.itemStack.itemMeta!!
             val meta = displayItem.itemMeta!!
             
-            // アイテムの正式名前（Material名から生成）
+            // Official item name (generated from the Material name)
             val officialName = displayItem.type.name.replace("_", " ").lowercase()
                 .split(" ").joinToString(" ") { it.replaceFirstChar(Char::uppercase) }
             
-            // 表示名（元のアイテムのカスタム名があればそれを使用、なければ正式名）
+            // Display name (use the original custom name if present, otherwise the official name)
             val displayName = if (originalMeta.hasDisplayName()) {
                 originalMeta.displayName!!
             } else {
@@ -173,9 +114,9 @@ class AuctionUI : Listener {
             meta.setDisplayName("§6$displayName")
             
             val lore = mutableListOf<String>()
-            lore.add("§7アイテム正式名: §f$officialName")
+            lore.add("§7Item name: §f$officialName")
             if (originalMeta.hasDisplayName()) {
-                lore.add("§7設定名: §f${originalMeta.displayName}")
+                lore.add("§7Custom name: §f${originalMeta.displayName}")
             }
             lore.add("§7${plugin.langManager.getMessage(player, "ui.seller")}: §f${auctionItem.sellerName}")
             lore.add("§7${plugin.langManager.getMessage(player, "ui.current_bid")}: §a${ItemUtils.formatPriceWithCurrency(auctionItem.currentPrice, plugin.getEconomyProvider(), plugin)}")
@@ -184,8 +125,8 @@ class AuctionUI : Listener {
                 lore.add("§7${plugin.langManager.getMessage(player, "ui.buyout_price")}: §e${ItemUtils.formatPriceWithCurrency(auctionItem.buyoutPrice, plugin.getEconomyProvider(), plugin)}")
             }
             
-            lore.add("§7数量: §f${auctionItem.quantity}")
-            lore.add("§7期限: §f${ItemUtils.formatDate(auctionItem.expiresAt, plugin)}")
+            lore.add("§7Quantity: §f${auctionItem.quantity}")
+            lore.add("§7Expires: §f${ItemUtils.formatDate(auctionItem.expiresAt, plugin)}")
             val timeRemaining = ItemUtils.formatTimeRemaining(auctionItem.expiresAt, plugin.langManager, player)
             lore.add("§7${plugin.langManager.getMessage(player, "time.remaining", timeRemaining)}")
             lore.add("")
@@ -235,11 +176,11 @@ class AuctionUI : Listener {
             val originalMeta = auctionItem.itemStack.itemMeta!!
             val meta = displayItem.itemMeta!!
             
-            // アイテムの正式名前（Material名から生成）
+            // Official item name (generated from the Material name)
             val officialName = displayItem.type.name.replace("_", " ").lowercase()
                 .split(" ").joinToString(" ") { it.replaceFirstChar(Char::uppercase) }
             
-            // 表示名（元のアイテムのカスタム名があればそれを使用、なければ正式名）
+            // Display name (use the original custom name if present, otherwise the official name)
             val displayName = if (originalMeta.hasDisplayName()) {
                 originalMeta.displayName!!
             } else {
@@ -249,9 +190,9 @@ class AuctionUI : Listener {
             meta.setDisplayName("§6$displayName")
             
             val lore = mutableListOf<String>()
-            lore.add("§7アイテム正式名: §f$officialName")
+            lore.add("§7Item name: §f$officialName")
             if (originalMeta.hasDisplayName()) {
-                lore.add("§7設定名: §f${originalMeta.displayName}")
+                lore.add("§7Custom name: §f${originalMeta.displayName}")
             }
             lore.add("§7${plugin.langManager.getMessage(player, "ui.seller")}: §f${auctionItem.sellerName}")
             lore.add("§7${plugin.langManager.getMessage(player, "ui.current_bid")}: §a${ItemUtils.formatPriceWithCurrency(auctionItem.currentPrice, plugin.getEconomyProvider(), plugin)}")
@@ -272,8 +213,8 @@ class AuctionUI : Listener {
                 lore.add("§7${plugin.langManager.getMessage(player, "ui.buyout_price")}: §e${ItemUtils.formatPriceWithCurrency(auctionItem.buyoutPrice, plugin.getEconomyProvider(), plugin)}")
             }
             
-            lore.add("§7数量: §f${auctionItem.quantity}")
-            lore.add("§7期限: §f${ItemUtils.formatDate(auctionItem.expiresAt, plugin)}")
+            lore.add("§7Quantity: §f${auctionItem.quantity}")
+            lore.add("§7Expires: §f${ItemUtils.formatDate(auctionItem.expiresAt, plugin)}")
             val timeRemaining = ItemUtils.formatTimeRemaining(auctionItem.expiresAt, plugin.langManager, player)
             lore.add("§7${plugin.langManager.getMessage(player, "time.remaining", timeRemaining)}")
             lore.add("")
@@ -344,7 +285,6 @@ class AuctionUI : Listener {
         val plugin = Main.instance
 
         // Check if this is one of our auction UIs
-        val auctionHouseTitle = plugin.langManager.getMessage(player, "ui.auction_house")
         val searchResultsTitle = plugin.langManager.getMessage(player, "ui.search_results")
         val yourAuctionsTitle = plugin.langManager.getMessage(player, "ui.your_auctions")
         val myBidsTitle = plugin.langManager.getMessage(player, "ui.my_bids")
@@ -354,8 +294,7 @@ class AuctionUI : Listener {
         val isCategoryPage = AuctionCategory.values()
             .any { title.contains(getCategoryDisplayName(it, plugin, player)) }
 
-        val isAuctionUI = title.contains(auctionHouseTitle) ||
-                         title.startsWith(SEARCH_TITLE) ||
+        val isAuctionUI = title.startsWith(SEARCH_TITLE) ||
                          title.contains(searchResultsTitle) ||
                          title.contains(yourAuctionsTitle) ||
                          title.contains(myBidsTitle) ||
@@ -369,41 +308,11 @@ class AuctionUI : Listener {
         val clickedItem = event.currentItem ?: return
 
         when {
-            title.contains(auctionHouseTitle) -> handleMainMenuClick(player, event.rawSlot, clickedItem, plugin, event.isRightClick)
             isCategoryPage -> handleSubPageClick(player, event.rawSlot, clickedItem, plugin, event.isRightClick)
             title.startsWith(SEARCH_TITLE) || title.contains(searchResultsTitle) -> handleSubPageClick(player, event.rawSlot, clickedItem, plugin, event.isRightClick)
             title.contains(yourAuctionsTitle) -> handleSubPageClick(player, event.rawSlot, clickedItem, plugin, event.isRightClick, isMyListings = true)
             title.contains(myBidsTitle) -> handleMyBidsClick(player, event.rawSlot, clickedItem, plugin, event.isRightClick)
             title.contains(mailboxTitle) -> handleMailBoxClick(player, clickedItem, plugin)
-        }
-    }
-
-    private fun handleMainMenuClick(player: Player, slot: Int, clickedItem: ItemStack, plugin: Main, isRightClick: Boolean) {
-        when (slot) {
-            // Row 1: Category buttons (slots 0-5) → navigate to category page
-            in 0..5 -> {
-                val categories = AuctionCategory.values()
-                if (slot < categories.size) {
-                    openCategoryUI(player, plugin, categories[slot])
-                }
-            }
-            // Row 6: Personal
-            45 -> openMyListingsUI(player, plugin)
-            46 -> openMyBidsUI(player, plugin)
-            47 -> {
-                player.closeInventory()
-                plugin.mailManager.openMailBox(player)
-            }
-            // Row 6: Utility
-            52 -> {
-                player.closeInventory()
-                plugin.langManager.sendInfoMessage(player, "ui.type_search_term")
-                plugin.searchHandler.startSearch(player)
-            }
-            53 -> {
-                player.closeInventory()
-                LanguageSettingsUI.openLanguageSettings(player, plugin)
-            }
         }
     }
 
@@ -472,36 +381,20 @@ class AuctionUI : Listener {
                     return@Runnable
                 }
 
-                val currentPrice = auctionInfo.currentPrice
                 val buyoutPrice = auctionInfo.buyoutPrice
 
                 if (isRightClick && buyoutPrice != null) {
                     player.sendMessage("§eBuyout price: ${ItemUtils.formatPriceWithCurrency(buyoutPrice, plugin.getEconomyProvider(), plugin)}")
-                    player.sendMessage("§e'/ah confirm' コマンドで購入を実行してください。")
+                    player.sendMessage("§eUse '/ah confirm' to complete your purchase.")
                     plugin.bidHandler.startBuyout(player, auctionId, buyoutPrice)
                 } else {
-                    val timeRemaining = ItemUtils.formatTimeRemaining(auctionInfo.expiresAt, plugin.langManager, player)
-
-                    player.sendMessage("§e━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
-                    player.sendMessage("§6${plugin.langManager.getMessage(player, "ui.bid_prompt_header")}")
-                    player.sendMessage("§7${plugin.langManager.getMessage(player, "ui.current_highest_bid")}: §a${ItemUtils.formatPriceWithCurrency(currentPrice, plugin.getEconomyProvider(), plugin)}")
-                    player.sendMessage("§7${plugin.langManager.getMessage(player, "ui.minimum_bid")}: §e${ItemUtils.formatPriceWithCurrency(currentPrice + 1, plugin.getEconomyProvider(), plugin)}")
-                    if (buyoutPrice != null) {
-                        player.sendMessage("§7${plugin.langManager.getMessage(player, "ui.buyout_price")}: §6${ItemUtils.formatPriceWithCurrency(buyoutPrice, plugin.getEconomyProvider(), plugin)}")
-                        player.sendMessage("§8${plugin.langManager.getMessage(player, "ui.buyout_hint")}")
-                    }
-                    player.sendMessage("§7${plugin.langManager.getMessage(player, "time.remaining", timeRemaining)}")
-                    player.sendMessage("")
-                    player.sendMessage("§e${plugin.langManager.getMessage(player, "ui.enter_bid_amount")}:")
-                    player.sendMessage("§8${plugin.langManager.getMessage(player, "ui.bid_command_hint")}: §7/ah bid $auctionId <金額>")
-                    player.sendMessage("§e━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
-                    plugin.bidHandler.startBid(player, auctionId, currentPrice)
+                    BidDialog.open(player, plugin, auctionInfo)
                 }
             })
         })
     }
     
-    private fun openMyListingsUI(player: Player, plugin: Main, page: Int = 0) {
+    fun openMyListingsUI(player: Player, plugin: Main, page: Int = 0) {
         val title = plugin.langManager.getMessage(player, "ui.your_auctions")
         val inventory = Bukkit.createInventory(null, 54, "§6$title")
         val myItems = plugin.auctionManager.getPlayerListings(player.uniqueId)
@@ -584,26 +477,7 @@ class AuctionUI : Listener {
 
                 plugin.server.scheduler.runTask(plugin, Runnable {
                     if (auctionInfo != null) {
-                        val currentPrice = auctionInfo.currentPrice
-                        val playerBidAmount = auctionInfo.playerBidAmount ?: 0L
-                        val timeRemaining = ItemUtils.formatTimeRemaining(auctionInfo.expiresAt, plugin.langManager, player)
-
-                        player.sendMessage("§e━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
-                        player.sendMessage("§6${plugin.langManager.getMessage(player, "ui.change_bid_header")}")
-                        player.sendMessage("§7${plugin.langManager.getMessage(player, "ui.current_highest_bid")}: §a${ItemUtils.formatPriceWithCurrency(currentPrice, plugin.getEconomyProvider(), plugin)}")
-                        player.sendMessage("§7${plugin.langManager.getMessage(player, "ui.your_current_bid")}: §e${ItemUtils.formatPriceWithCurrency(playerBidAmount, plugin.getEconomyProvider(), plugin)}")
-                        player.sendMessage("§7${plugin.langManager.getMessage(player, "ui.minimum_bid")}: §e${ItemUtils.formatPriceWithCurrency(currentPrice + 1, plugin.getEconomyProvider(), plugin)}")
-                        if (auctionInfo.buyoutPrice != null) {
-                            player.sendMessage("§7${plugin.langManager.getMessage(player, "ui.buyout_price")}: §6${ItemUtils.formatPriceWithCurrency(auctionInfo.buyoutPrice, plugin.getEconomyProvider(), plugin)}")
-                            player.sendMessage("§8${plugin.langManager.getMessage(player, "ui.buyout_hint")}")
-                        }
-                        player.sendMessage("§7${plugin.langManager.getMessage(player, "time.remaining", timeRemaining)}")
-                        player.sendMessage("")
-                        player.sendMessage("§e${plugin.langManager.getMessage(player, "ui.enter_new_bid_amount")}:")
-                        player.sendMessage("§8${plugin.langManager.getMessage(player, "ui.bid_command_hint")}: §7/ah bid $auctionId <金額>")
-                        player.sendMessage("§e━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
-
-                        plugin.bidHandler.startBid(player, auctionId, currentPrice)
+                        BidDialog.open(player, plugin, auctionInfo, changing = true)
                     } else {
                         player.sendMessage("§c${plugin.langManager.getMessage(player, "auction.item_not_found")}")
                         openMyBidsUI(player, plugin)

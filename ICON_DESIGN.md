@@ -1,71 +1,71 @@
-# 🎨 Best Auction Plugin - アイコンデザイン提案
+# 🎨 Best Auction Plugin - Icon Design Proposals
 
-## 📋 デザインコンセプト
+## 📋 Design Concept
 
-### 🎯 デザインの方向性
-- **Minecraftスタイル**: ピクセルアート風のデザイン
-- **オークション要素**: ハンマー、コイン、チェストなどの象徴的アイテム
-- **プロフェッショナル**: 信頼性を感じられる色合い
-- **視認性**: 小さなサイズでも認識しやすい
+### 🎯 Design Direction
+- **Minecraft style**: Pixel art design
+- **Auction elements**: Recognizable items such as a hammer, coins, and a chest
+- **Professional appearance**: Colors that convey reliability
+- **Visibility**: Easy to recognize even at small sizes
 
-## 🎨 アイコンデザイン案
+## 🎨 Icon Design Ideas
 
-### 案1: オークションハンマー + コイン
+### Idea 1: Auction Hammer + Coins
 ```
-背景: 深いブルー (#1a237e)
-メイン: 金色のハンマー (#ffd700)
-アクセント: 銀色のコイン (#c0c0c0)
-```
-
-**説明**: クラシックなオークションハンマーを中央に配置し、周りにコインを散りばめたデザイン。オークションの象徴的なアイテムで一目でわかりやすい。
-
-### 案2: チェスト + 価格タグ
-```
-背景: 暖かいオレンジ (#ff8f00)
-メイン: 茶色のチェスト (#8d6e63)
-アクセント: 緑色の価格タグ (#4caf50)
+Background: Deep blue (#1a237e)
+Main element: Golden hammer (#ffd700)
+Accent: Silver coins (#c0c0c0)
 ```
 
-**説明**: Minecraftのチェストに価格タグが付いたデザイン。アイテム保管と価格設定を同時に表現。
+**Description**: A classic auction hammer in the center, surrounded by coins. These auction symbols make the design immediately recognizable.
 
-### 案3: ダイヤモンド + ハンマー (推奨)
+### Idea 2: Chest + Price Tag
 ```
-背景: グラデーション (濃紺から紫 #1a237e → #4a148c)
-メイン: 水色のダイヤモンド (#00bcd4)
-シンボル: 金色のハンマー (#ffd700)
+Background: Warm orange (#ff8f00)
+Main element: Brown chest (#8d6e63)
+Accent: Green price tag (#4caf50)
 ```
 
-**説明**: Minecraftで最も価値のあるダイヤモンドとオークションハンマーを組み合わせ。高級感と機能性を両立。
+**Description**: A Minecraft chest with a price tag, representing both item storage and pricing.
 
-## 🖼️ 推奨デザイン仕様
+### Idea 3: Diamond + Hammer (Recommended)
+```
+Background: Gradient (dark blue to purple, #1a237e → #4a148c)
+Main element: Cyan diamond (#00bcd4)
+Symbol: Golden hammer (#ffd700)
+```
 
-### サイズ要件
-- **Modrinth**: 最小128x128px、推奨512x512px
+**Description**: Combines Minecraft's highly valuable diamond with an auction hammer, balancing a premium appearance with functionality.
+
+## 🖼️ Recommended Design Specifications
+
+### Size Requirements
+- **Modrinth**: Minimum 128x128px, recommended 512x512px
 - **GitHub**: 128x128px
-- **フォーマット**: PNG (透明背景対応)
+- **Format**: PNG (supports transparent backgrounds)
 
-### カラーパレット
+### Color Palette
 ```css
-プライマリ: #1a237e (深いブルー)
-セカンダリ: #ffd700 (ゴールド)
-アクセント: #00bcd4 (水色)
-背景: #4a148c (パープル)
-テキスト: #ffffff (ホワイト)
+Primary: #1a237e (deep blue)
+Secondary: #ffd700 (gold)
+Accent: #00bcd4 (cyan)
+Background: #4a148c (purple)
+Text: #ffffff (white)
 ```
 
-## 🎯 最終推奨デザイン
+## 🎯 Final Recommended Design
 
-### デザイン: "ダイヤモンド・オークション"
-- **中央**: 大きな水色ダイヤモンド (Minecraftスタイル)
-- **右上**: 小さな金色ハンマー
-- **背景**: 濃紺から紫へのグラデーション
-- **エフェクト**: ダイヤモンドの周りに微細な光る粒子
-- **フォント**: Minecraft風のピクセルフォント
+### Design: "Diamond Auction"
+- **Center**: Large cyan diamond (Minecraft style)
+- **Top right**: Small golden hammer
+- **Background**: Dark blue to purple gradient
+- **Effects**: Small glowing particles around the diamond
+- **Font**: Minecraft-style pixel font
 
-### SVGコード (ベース)
+### SVG Code (Base)
 ```svg
 <svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
-  <!-- 背景グラデーション -->
+  <!-- Background gradient -->
   <defs>
     <radialGradient id="bg" cx="50%" cy="30%">
       <stop offset="0%" style="stop-color:#4a148c"/>
@@ -73,24 +73,24 @@
     </radialGradient>
   </defs>
   
-  <!-- 背景 -->
+  <!-- Background -->
   <rect width="512" height="512" fill="url(#bg)" rx="64"/>
   
-  <!-- メインダイヤモンド -->
+  <!-- Main diamond -->
   <path d="M256 80 L380 200 L256 380 L132 200 Z" 
         fill="#00bcd4" stroke="#ffffff" stroke-width="4"/>
   
-  <!-- ダイヤモンドの内部線 -->
+  <!-- Internal diamond lines -->
   <path d="M194 200 L256 140 L318 200 M194 200 L318 200" 
         stroke="#ffffff" stroke-width="2" opacity="0.6"/>
   
-  <!-- ハンマー -->
+  <!-- Hammer -->
   <g transform="translate(360,120) scale(0.8)">
     <rect x="0" y="0" width="40" height="20" fill="#ffd700"/>
     <rect x="15" y="20" width="10" height="60" fill="#8d6e63"/>
   </g>
   
-  <!-- 光る粒子 -->
+  <!-- Glowing particles -->
   <circle cx="200" cy="150" r="3" fill="#ffffff" opacity="0.8"/>
   <circle cx="320" cy="180" r="2" fill="#ffffff" opacity="0.6"/>
   <circle cx="180" cy="280" r="2" fill="#ffffff" opacity="0.7"/>
@@ -98,48 +98,48 @@
 </svg>
 ```
 
-## 🛠️ 作成方法
+## 🛠️ Creation Methods
 
-### オプション1: AI画像生成
+### Option 1: AI Image Generation
 ```
-プロンプト: "Minecraft style pixel art icon for auction house plugin, featuring a cyan diamond and golden hammer, dark blue to purple gradient background, 512x512px, clean and professional"
+Prompt: "Minecraft style pixel art icon for auction house plugin, featuring a cyan diamond and golden hammer, dark blue to purple gradient background, 512x512px, clean and professional"
 ```
 
-### オプション2: 手動作成ツール
-- **Figma**: ベクターデザイン
-- **Photoshop**: ピクセルアート
-- **GIMP**: 無料代替
-- **Aseprite**: ピクセルアート専用
+### Option 2: Manual Design Tools
+- **Figma**: Vector design
+- **Photoshop**: Pixel art
+- **GIMP**: Free alternative
+- **Aseprite**: Dedicated pixel art tool
 
-### オプション3: Minecraft風ジェネレーター
+### Option 3: Minecraft-Style Generators
 - MinecraftSkinEditor
-- Blockbench (3Dモデル→2Dアイコン)
+- Blockbench (3D models → 2D icons)
 
-## 📁 ファイル出力
+## 📁 Output Files
 
-以下のファイルを準備：
+Prepare the following files:
 ```
 icons/
-├── icon-512.png    # Modrinth用高解像度
-├── icon-128.png    # GitHub用標準
-├── icon-64.png     # 小サイズ用
-├── icon-32.png     # ファビコン用
-└── icon.svg        # ベクター版（編集用）
+├── icon-512.png    # High resolution for Modrinth
+├── icon-128.png    # Standard size for GitHub
+├── icon-64.png     # Small size
+├── icon-32.png     # Favicon
+└── icon.svg        # Vector version (for editing)
 ```
 
-## 🎨 代替案
+## 🎨 Alternatives
 
-時間が限られている場合のシンプル案：
+Simple options when time is limited:
 
-### シンプル版1: テキストロゴ
-- 背景: 濃紺
-- テキスト: "BA" (Best Auction)
-- フォント: Minecraft風
-- 装飾: 小さなハンマーアイコン
+### Simple Version 1: Text Logo
+- Background: Dark blue
+- Text: "BA" (Best Auction)
+- Font: Minecraft style
+- Decoration: Small hammer icon
 
-### シンプル版2: Emojiベース
-- 背景: グラデーション
-- メイン: 🔨 (ハンマー絵文字を大きく)
-- アクセント: 💎 (ダイヤモンド絵文字)
+### Simple Version 2: Emoji-Based
+- Background: Gradient
+- Main element: 🔨 (large hammer emoji)
+- Accent: 💎 (diamond emoji)
 
-これらのデザイン案から、Best Auctionにふさわしいプロフェッショナルなアイコンを作成できます！
+Use these design ideas to create a professional icon suited to Best Auction!

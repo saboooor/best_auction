@@ -6,8 +6,8 @@ import net.milkbowl.vault.economy.EconomyResponse
 import org.bukkit.OfflinePlayer
 
 /**
- * 内蔵経済システムをVault APIとして公開するためのフック
- * これにより他のプラグインがVault経由で内蔵経済を使用できる
+ * Hook that exposes the internal economy through the Vault API
+ * Allows other plugins to use the internal economy through Vault
  */
 class VaultEconomyHook(private val plugin: Main, private val internalEconomy: InternalEconomy) : Economy {
 
@@ -98,7 +98,7 @@ class VaultEconomyHook(private val plugin: Main, private val internalEconomy: In
     }
 
     override fun createPlayerAccount(player: OfflinePlayer): Boolean {
-        // InternalEconomyはensureAccountで自動作成するので、残高取得で作成される
+        // InternalEconomy creates accounts automatically via ensureAccount when retrieving a balance
         internalEconomy.getBalance(player)
         return true
     }

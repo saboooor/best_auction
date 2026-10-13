@@ -1,16 +1,11 @@
 package com.hacklab.best_auction.utils
 
 import com.hacklab.best_auction.Main
-import com.hacklab.best_auction.database.PlayerLanguageSettings
 import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.entity.Player
-import org.jetbrains.exposed.sql.*
-import org.jetbrains.exposed.sql.transactions.transaction
 import java.io.File
 import java.io.InputStreamReader
 import java.text.MessageFormat
-import java.time.LocalDateTime
-import java.util.*
 
 class LangManager(private val plugin: Main) {
     
@@ -28,7 +23,7 @@ class LangManager(private val plugin: Main) {
         }
         
         // Load default languages from resources
-        val defaultLangs = listOf("en", "ja")
+        val defaultLangs = listOf("en")
         for (lang in defaultLangs) {
             val langFile = File(langDir, "$lang.yml")
             if (!langFile.exists()) {
@@ -96,74 +91,11 @@ class LangManager(private val plugin: Main) {
         }
     }
     
-    private fun getPlayerLanguage(player: Player): String {
-        return transaction {
-            // Check for player-specific language setting
-            val setting = PlayerLanguageSettings.select { 
-                PlayerLanguageSettings.playerUuid eq player.uniqueId.toString() 
-            }.singleOrNull()
-            
-            if (setting != null) {
-                val savedLang = setting[PlayerLanguageSettings.language]
-                if (savedLang != "auto" && languages.containsKey(savedLang)) {
-                    return@transaction savedLang
-                }
-            }
-            
-            // Auto-detect from client locale
-            try {
-                val locale = player.locale
-                when {
-                    locale.startsWith("ja") -> "ja"
-                    locale.startsWith("en") -> "en"
-                    else -> defaultLanguage
-                }
-            } catch (e: Exception) {
-                defaultLanguage
-            }
-        }
+    fun getPlayerLanguage(player: Player): String {
+        val language = player.locale().language.lowercase(java.util.Locale.ROOT)
+        return if (languages.containsKey(language)) language else defaultLanguage
     }
-    
-    fun setPlayerLanguage(player: Player, language: String): Boolean {
-        if (!languages.containsKey(language) && language != "auto") {
-            return false
-        }
-        
-        return transaction {
-            try {
-                val existing = PlayerLanguageSettings.select { 
-                    PlayerLanguageSettings.playerUuid eq player.uniqueId.toString() 
-                }.singleOrNull()
-                
-                if (existing != null) {
-                    PlayerLanguageSettings.update({ 
-                        PlayerLanguageSettings.playerUuid eq player.uniqueId.toString() 
-                    }) {
-                        it[PlayerLanguageSettings.language] = language
-                        it[updatedAt] = LocalDateTime.now()
-                    }
-                } else {
-                    PlayerLanguageSettings.insert {
-                        it[playerUuid] = player.uniqueId.toString()
-                        it[PlayerLanguageSettings.language] = language
-                    }
-                }
-                true
-            } catch (e: Exception) {
-                plugin.logger.warning("Failed to save player language setting: ${e.message}")
-                false
-            }
-        }
-    }
-    
-    fun getPlayerLanguageSetting(player: Player): String {
-        return transaction {
-            PlayerLanguageSettings.select { 
-                PlayerLanguageSettings.playerUuid eq player.uniqueId.toString() 
-            }.singleOrNull()?.get(PlayerLanguageSettings.language) ?: "auto"
-        }
-    }
-    
+
     fun getAvailableLanguages(): Set<String> {
         return languages.keys
     }

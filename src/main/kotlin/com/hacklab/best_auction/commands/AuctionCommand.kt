@@ -3,7 +3,6 @@ package com.hacklab.best_auction.commands
 import com.hacklab.best_auction.Main
 import com.hacklab.best_auction.data.AuctionCategory
 import com.hacklab.best_auction.ui.AuctionUI
-import com.hacklab.best_auction.ui.LanguageSettingsUI
 import com.hacklab.best_auction.utils.ItemUtils
 import org.bukkit.Material
 import org.bukkit.command.Command
@@ -128,15 +127,6 @@ class AuctionCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
                 
                 val searchTerm = args.drop(1).joinToString(" ")
                 AuctionUI.openSearchUI(sender, plugin, searchTerm)
-            }
-            
-            "language", "lang" -> {
-                if (sender !is Player) {
-                    sender.sendMessage(plugin.langManager.getMessage("command.only_players"))
-                    return true
-                }
-                
-                LanguageSettingsUI.openLanguageSettings(sender, plugin)
             }
             
             "confirm" -> {
@@ -459,7 +449,7 @@ class AuctionCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
 
     override fun onTabComplete(sender: CommandSender, command: Command, alias: String, args: Array<out String>): List<String>? {
         if (args.size == 1) {
-            val commands = mutableListOf("sell", "bid", "cancel", "search", "mail", "language", "confirm", "help", "balance", "pay")
+            val commands = mutableListOf("sell", "bid", "cancel", "search", "mail", "confirm", "help", "balance", "pay")
             if (sender.hasPermission("auction.admin")) {
                 commands.add("cloud")
                 commands.add("eco")
@@ -520,7 +510,6 @@ class AuctionCommand(private val plugin: Main) : CommandExecutor, TabCompleter {
         player.sendMessage("§e/$label search <name> §7${plugin.langManager.getMessage(player, "command.help_search")}")
         player.sendMessage("§e/$label mail §7${plugin.langManager.getMessage(player, "command.help_mail")}")
         player.sendMessage("§e/$label confirm §7${plugin.langManager.getMessage(player, "command.help_confirm")}")
-        player.sendMessage("§e/$label language §7- Change language settings")
         player.sendMessage("§e/$label balance §7${plugin.langManager.getMessage(player, "economy.help_balance")}")
         player.sendMessage("§e/$label pay <player> <amount> §7${plugin.langManager.getMessage(player, "economy.help_pay")}")
         player.sendMessage("§e/$label help §7${plugin.langManager.getMessage(player, "command.help_help")}")

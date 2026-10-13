@@ -5,8 +5,8 @@ import org.bukkit.OfflinePlayer
 import org.bukkit.entity.Player
 
 /**
- * Vault経済システムのラッパー
- * 既存のVault/VaultUnlocked経済プラグインと連携する
+ * Wrapper for the Vault economy system
+ * Integrates with existing Vault/VaultUnlocked economy plugins
  */
 class VaultEconomy(private val vaultEconomy: Economy) : EconomyProvider {
 

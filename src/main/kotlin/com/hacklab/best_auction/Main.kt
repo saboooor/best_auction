@@ -70,7 +70,6 @@ class Main : JavaPlugin() {
         server.pluginManager.registerEvents(AuctionUI(), this)
         server.pluginManager.registerEvents(bidHandler, this)
         server.pluginManager.registerEvents(searchHandler, this)
-        server.pluginManager.registerEvents(com.hacklab.best_auction.ui.LanguageSettingsUI(), this)
 
         ExpirationTask(this).runTaskTimer(this, 20L * 60L * 5L, 20L * 60L * 5L)
 
@@ -89,7 +88,7 @@ class Main : JavaPlugin() {
 
         when (providerType.lowercase()) {
             "internal" -> {
-                // 強制的に内蔵経済を使用
+                // Force the internal economy
                 val internalEconomy = InternalEconomy(this)
                 economyProvider = internalEconomy
                 registerInternalEconomyToVault(internalEconomy)
@@ -97,7 +96,7 @@ class Main : JavaPlugin() {
                 return true
             }
             "vault" -> {
-                // Vaultのみを使用（見つからない場合は失敗）
+                // Use only Vault (fail if unavailable)
                 val vaultEconomy = trySetupVaultEconomy()
                 if (vaultEconomy == null) {
                     logger.severe(langManager.getMessage("general.vault_not_found"))
@@ -107,7 +106,7 @@ class Main : JavaPlugin() {
                 return true
             }
             else -> {
-                // auto: Vaultが利用可能なら使用、そうでなければ内蔵経済
+                // auto: Use Vault if available, otherwise the internal economy
                 val vaultEconomy = trySetupVaultEconomy()
                 if (vaultEconomy != null) {
                     economyProvider = vaultEconomy
@@ -123,10 +122,10 @@ class Main : JavaPlugin() {
     }
 
     /**
-     * 内蔵経済システムをVaultに登録して他のプラグインから使用可能にする
+     * Register the internal economy with Vault for use by other plugins
      */
     private fun registerInternalEconomyToVault(internalEconomy: InternalEconomy) {
-        // VaultまたはVaultUnlockedが存在する場合のみ登録
+        // Register only when Vault or VaultUnlocked is present
         val vaultPlugin = server.pluginManager.getPlugin("Vault")
             ?: server.pluginManager.getPlugin("VaultUnlocked")
 
@@ -138,11 +137,11 @@ class Main : JavaPlugin() {
     }
 
     /**
-     * Vault経済システムのセットアップを試みる
-     * @return 成功した場合はVaultEconomy、失敗した場合はnull
+     * Attempt to set up the Vault economy
+     * @return VaultEconomy on success, or null on failure
      */
     private fun trySetupVaultEconomy(): VaultEconomy? {
-        // VaultまたはVaultUnlockedをチェック
+        // Check for Vault or VaultUnlocked
         val vaultPlugin = server.pluginManager.getPlugin("Vault")
             ?: server.pluginManager.getPlugin("VaultUnlocked")
 
@@ -166,24 +165,24 @@ class Main : JavaPlugin() {
     fun getEconomyProvider(): EconomyProvider? = if (::economyProvider.isInitialized) economyProvider else null
 
     /**
-     * 内蔵経済システムを取得（内蔵経済使用時のみ）
+     * Get the internal economy (only when it is in use)
      */
     fun getInternalEconomy(): InternalEconomy? {
         return economyProvider as? InternalEconomy
     }
 
     /**
-     * ショートカット経済コマンドを登録
-     * 内蔵経済使用時、かつ設定で有効な場合のみ登録
+     * Register shortcut economy commands
+     * Register only when using the internal economy and enabled in configuration
      */
     private fun registerShortcutCommands() {
-        // 内蔵経済を使用していない場合は登録しない
+        // Do not register unless the internal economy is in use
         if (economyProvider !is InternalEconomy) {
             logger.info("External economy detected, skipping shortcut command registration")
             return
         }
 
-        // 設定で無効になっている場合は登録しない
+        // Do not register when disabled in configuration
         if (!config.getBoolean("economy.register_shortcut_commands", true)) {
             logger.info("Shortcut command registration disabled in config")
             return
@@ -192,11 +191,11 @@ class Main : JavaPlugin() {
         try {
             val commandMap = server.commandMap
 
-            // /balance, /bal, /money コマンド
+            // /balance, /bal, /money commands
             val balanceCommand = EconomyCommand(this, EconomyCommand.CommandType.BALANCE)
             registerCommand("balance", balanceCommand, "Check your balance", listOf("bal", "money"))
 
-            // /pay コマンド
+            // /pay command
             val payCommand = EconomyCommand(this, EconomyCommand.CommandType.PAY)
             registerCommand("pay", payCommand, "Send money to another player", listOf("send"))
 
@@ -207,13 +206,13 @@ class Main : JavaPlugin() {
     }
 
     /**
-     * コマンドを動的に登録
+     * Register a command dynamically
      */
     private fun registerCommand(name: String, executor: EconomyCommand, description: String, aliases: List<String> = emptyList()) {
         try {
             val commandMap = server.commandMap
 
-            // PluginCommandのコンストラクタを取得（privateなのでリフレクション使用）
+            // Get the PluginCommand constructor (use reflection because it is private)
             val constructor: Constructor<PluginCommand> = PluginCommand::class.java.getDeclaredConstructor(
                 String::class.java,
                 org.bukkit.plugin.Plugin::class.java
@@ -226,7 +225,7 @@ class Main : JavaPlugin() {
             command.tabCompleter = executor
             command.aliases = aliases
 
-            // 既存のコマンドがある場合は登録をスキップ
+            // Skip registration if the command already exists
             val existingCommand = commandMap.getCommand(name)
             if (existingCommand != null) {
                 val pluginName = if (existingCommand is PluginCommand) {

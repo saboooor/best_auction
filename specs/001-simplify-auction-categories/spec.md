@@ -1,121 +1,121 @@
-# Feature Specification: オークションカテゴリの簡素化
+# Feature Specification: Simplify Auction Categories
 
 **Feature Branch**: `001-simplify-auction-categories`
 **Created**: 2026-03-24
 **Status**: Draft
-**Input**: User description: "オークションのカテゴリがわかりにくい、新着順のすべてのリスト、ブロック、食品、武器装備、エンチャント、その他ぐらいで十分なカテゴライズだとおもう。"
+**Input**: User description: "The auction categories are confusing. I think an all-items list ordered newest first, Blocks, Food, Weapons & Equipment, Enchantments, and Others would be enough."
 
 ## Clarifications
 
 ### Session 2026-03-24
 
-- Q: 「エンチャント」カテゴリの対象範囲は？エンチャント本のみ、またはエンチャント付き全アイテム？ → A: エンチャントが付与された全アイテム（本・武器・防具・ツールすべて含む）
+- Q: What should the “Enchantments” category include: only enchanted books, or all enchanted items? → A: All enchanted items (including books, weapons, armor, and tools)
 
 ## User Scenarios & Testing *(mandatory)*
 
-### User Story 1 - すべてのアイテムを新着順で閲覧 (Priority: P1)
+### User Story 1 - Browse All Items Newest First (Priority: P1)
 
-プレイヤーがオークションハウスを開いたとき、まず「すべて」カテゴリが表示され、出品中の全アイテムが新着順（出品日時の新しい順）で一覧表示される。これにより、最新の出品を素早く確認できる。
+When a player opens the auction house, the “All” category appears first, displaying all listed items in newest-first order (most recent listing time first). This lets players quickly check the latest listings.
 
-**Why this priority**: オークションハウスを開いた直後に全体像を把握できることが最も重要な体験。カテゴリを選ぶ前に、何が出品されているかを一目で確認したいというニーズに応える。
+**Why this priority**: Getting an overview immediately after opening the auction house is the most important experience. Players want to see what is listed at a glance before choosing a category.
 
-**Independent Test**: オークションハウスを開き、全アイテムが新着順で表示されることを確認する。複数アイテムを異なる時間に出品し、順序が正しいことを検証する。
+**Independent Test**: Open the auction house and verify that all items appear newest first. List several items at different times and verify their order.
 
 **Acceptance Scenarios**:
 
-1. **Given** オークションハウスに複数のアイテムが出品されている, **When** プレイヤーがオークションハウスを開く, **Then** 「すべて」カテゴリが初期表示され、全アイテムが新着順で表示される
-2. **Given** 「すべて」カテゴリを表示中, **When** 新しいアイテムが出品される, **Then** 次回表示時にそのアイテムがリストの先頭に表示される
-3. **Given** オークションハウスにアイテムがない, **When** プレイヤーがオークションハウスを開く, **Then** 「すべて」カテゴリが表示され、出品がないことを示すメッセージが表示される
+1. **Given** multiple items are listed in the auction house, **When** a player opens the auction house, **Then** the “All” category appears initially and all items are displayed newest first
+2. **Given** the “All” category is displayed, **When** a new item is listed, **Then** it appears at the top of the list the next time the view is displayed
+3. **Given** the auction house has no items, **When** a player opens it, **Then** the “All” category appears with a message indicating there are no listings
 
 ---
 
-### User Story 2 - 簡素化されたカテゴリでフィルタリング (Priority: P1)
+### User Story 2 - Filter with Simplified Categories (Priority: P1)
 
-プレイヤーが特定の種類のアイテムを探しているとき、5つのシンプルなカテゴリ（ブロック、食品、武器装備、エンチャント、その他）から選択してアイテムを絞り込める。現在の10カテゴリから5+1（すべて含む）に削減することで、子供でも直感的に目的のカテゴリを見つけられる。
+Players searching for a particular type of item can narrow the list using five simple categories (Blocks, Food, Weapons & Equipment, Enchantments, and Others). Reducing the current ten categories to five plus “All” makes it intuitive even for children to find the category they need.
 
-**Why this priority**: カテゴリの簡素化がこの機能の本質であり、ユーザーの「わかりにくい」という問題を直接解決する。
+**Why this priority**: Simplifying categories is the core of this feature and directly addresses the user's concern that they are confusing.
 
-**Independent Test**: 各カテゴリを選択し、そのカテゴリに属するアイテムのみが表示されることを確認する。旧カテゴリのアイテムが新カテゴリに正しくマッピングされることを検証する。
+**Independent Test**: Select each category and verify that only its items appear. Verify that items from legacy categories map correctly to the new categories.
 
 **Acceptance Scenarios**:
 
-1. **Given** オークションハウスを表示中, **When** プレイヤーが「ブロック」カテゴリを選択, **Then** 建築ブロック・装飾ブロックに分類されるアイテムのみが表示される
-2. **Given** オークションハウスを表示中, **When** プレイヤーが「食品」カテゴリを選択, **Then** 食料・飲料に分類されるアイテムのみが表示される
-3. **Given** オークションハウスを表示中, **When** プレイヤーが「武器装備」カテゴリを選択, **Then** エンチャントが付与されていない武器・防具・ツールに分類されるアイテムのみが表示される
-4. **Given** オークションハウスを表示中, **When** プレイヤーが「エンチャント」カテゴリを選択, **Then** エンチャントが付与された全アイテム（エンチャント本・エンチャント付き武器・防具・ツール）が表示される
-5. **Given** オークションハウスを表示中, **When** プレイヤーが「その他」カテゴリを選択, **Then** 上記カテゴリに属さないアイテム（レッドストーン、輸送、醸造、その他）が表示される
+1. **Given** the auction house is displayed, **When** a player selects “Blocks”, **Then** only items classified as building or decorative blocks appear
+2. **Given** the auction house is displayed, **When** a player selects “Food”, **Then** only items classified as food or drinks appear
+3. **Given** the auction house is displayed, **When** a player selects “Weapons & Equipment”, **Then** only non-enchanted weapons, armor, and tools appear
+4. **Given** the auction house is displayed, **When** a player selects “Enchantments”, **Then** all enchanted items (enchanted books, weapons, armor, and tools) appear
+5. **Given** the auction house is displayed, **When** a player selects “Others”, **Then** items outside the above categories (redstone, transportation, brewing, and miscellaneous items) appear
 
 ---
 
-### User Story 3 - 既存データの互換性維持 (Priority: P2)
+### User Story 3 - Preserve Compatibility with Existing Data (Priority: P2)
 
-カテゴリ変更前に出品されたアイテムが、新しいカテゴリ体系でも正しく表示される。データベースに保存された旧カテゴリ名が新カテゴリに正しくマッピングされ、アイテムが消失しない。
+Items listed before the category change still display correctly under the new category system. Legacy category names stored in the database map correctly to the new categories, with no items lost.
 
-**Why this priority**: 既存データの整合性はシステムの信頼性に直結するが、新規導入時に既存データがない場合もあるため P2 とする。
+**Why this priority**: Existing data integrity directly affects system reliability, but new installations may have no existing data, so this is P2.
 
-**Independent Test**: 旧カテゴリ名でデータベースに保存されたアイテムを用意し、新カテゴリで正しく表示されることを確認する。
+**Independent Test**: Prepare items saved in the database with legacy category names and verify that they display correctly in the new categories.
 
 **Acceptance Scenarios**:
 
-1. **Given** 旧カテゴリ「BUILDING_BLOCKS」で保存されたアイテムがある, **When** 新カテゴリ体系でオークションハウスを表示, **Then** そのアイテムが「ブロック」カテゴリに表示される
-2. **Given** 旧カテゴリ「REDSTONE」で保存されたアイテムがある, **When** 新カテゴリ体系でオークションハウスを表示, **Then** そのアイテムが「その他」カテゴリに表示される
-3. **Given** 旧カテゴリのアイテムが複数ある, **When** 「すべて」カテゴリを表示, **Then** すべてのアイテムが漏れなく表示される
+1. **Given** an item is saved under the legacy “BUILDING_BLOCKS” category, **When** the auction house is displayed using the new category system, **Then** the item appears under “Blocks”
+2. **Given** an item is saved under the legacy “REDSTONE” category, **When** the auction house is displayed using the new category system, **Then** the item appears under “Others”
+3. **Given** multiple items use legacy categories, **When** the “All” category is displayed, **Then** every item appears without omissions
 
 ---
 
 ### Edge Cases
 
-- 新しいMinecraftバージョンで追加されたアイテムが既存カテゴリに分類できない場合、「その他」にフォールバックする
-- エンチャントが付与されたアイテム（武器・防具・ツール含む）は「エンチャント」カテゴリに分類される。同じアイテムでもエンチャントの有無でカテゴリが変わる
-- 大量のアイテムが1つのカテゴリに集中した場合でもページネーションで正常に閲覧できる
+- Items added in new Minecraft versions that cannot be classified into an existing category fall back to “Others”
+- Enchanted items (including weapons, armor, and tools) belong to “Enchantments”. The same item type may have different categories depending on whether it is enchanted
+- Pagination allows normal browsing even when many items belong to a single category
 
 ## Requirements *(mandatory)*
 
 ### Functional Requirements
 
-- **FR-001**: システムは以下の6つのカテゴリを提供しなければならない：「すべて」「ブロック」「食品」「武器装備」「エンチャント」「その他」
-- **FR-002**: 「すべて」カテゴリは全出品アイテムを新着順（出品日時の降順）で表示しなければならない
-- **FR-003**: オークションハウスを開いた際の初期表示は「すべて」カテゴリでなければならない
-- **FR-004**: 「ブロック」カテゴリは旧カテゴリの BUILDING_BLOCKS と DECORATIONS に該当するアイテムを含まなければならない
-- **FR-005**: 「食品」カテゴリは旧カテゴリの FOOD に該当するアイテムを含まなければならない
-- **FR-006**: 「武器装備」カテゴリは旧カテゴリの COMBAT と TOOLS に該当し、かつエンチャントが付与されていないアイテムを含まなければならない
-- **FR-007**: 「エンチャント」カテゴリはエンチャントが付与された全アイテム（エンチャント本、エンチャント付き武器・防具・ツール等）を含まなければならない
-- **FR-008**: 「その他」カテゴリは旧カテゴリの REDSTONE、TRANSPORTATION、BREWING、MISCELLANEOUS に該当するアイテムを含まなければならない
-- **FR-009**: データベースに旧カテゴリ名で保存されたアイテムは、新カテゴリ体系で正しく表示されなければならない
-- **FR-010**: すべてのカテゴリ名とUI表示は多言語対応（英語・日本語）でなければならない
-- **FR-011**: 各カテゴリにはそのカテゴリを視覚的に表すアイコンが設定されなければならない
+- **FR-001**: The system must provide six categories: “All”, “Blocks”, “Food”, “Weapons & Equipment”, “Enchantments”, and “Others”
+- **FR-002**: The “All” category must display every listed item newest first (descending listing time)
+- **FR-003**: The initial view when opening the auction house must be the “All” category
+- **FR-004**: “Blocks” must include items from the legacy BUILDING_BLOCKS and DECORATIONS categories
+- **FR-005**: “Food” must include items from the legacy FOOD category
+- **FR-006**: “Weapons & Equipment” must include non-enchanted items from the legacy COMBAT and TOOLS categories
+- **FR-007**: “Enchantments” must include all enchanted items (enchanted books, weapons, armor, tools, etc.)
+- **FR-008**: “Others” must include items from the legacy REDSTONE, TRANSPORTATION, BREWING, and MISCELLANEOUS categories
+- **FR-009**: Items saved in the database with legacy category names must display correctly in the new category system
+- **FR-010**: All category names and UI displays must support localization (English and Japanese in the original specification)
+- **FR-011**: Each category must have an icon that visually represents it
 
-### カテゴリマッピング
+### Category Mapping
 
-| 新カテゴリ              | 旧カテゴリ                                            | アイコン候補     |
+| New Category           | Legacy Categories                                    | Suggested Icon |
 |------------------------|------------------------------------------------------|----------------|
-| すべて (All)            | 全カテゴリ                                             | CHEST          |
-| ブロック (Blocks)       | BUILDING_BLOCKS, DECORATIONS                          | STONE          |
-| 食品 (Food)            | FOOD                                                  | APPLE          |
-| 武器装備 (Weapons & Equipment) | COMBAT, TOOLS                                   | DIAMOND_SWORD  |
-| エンチャント (Enchantments)   | ENCHANTED_BOOKS + エンチャント付き全アイテム        | ENCHANTED_BOOK |
-| その他 (Others)         | REDSTONE, TRANSPORTATION, BREWING, MISCELLANEOUS      | LAVA_BUCKET    |
+| All                    | All categories                                       | CHEST          |
+| Blocks                 | BUILDING_BLOCKS, DECORATIONS                          | STONE          |
+| Food                   | FOOD                                                 | APPLE          |
+| Weapons & Equipment    | COMBAT, TOOLS                                        | DIAMOND_SWORD  |
+| Enchantments           | ENCHANTED_BOOKS + all enchanted items                 | ENCHANTED_BOOK |
+| Others                 | REDSTONE, TRANSPORTATION, BREWING, MISCELLANEOUS      | LAVA_BUCKET    |
 
 ### Key Entities
 
-- **AuctionCategory**: オークションアイテムの分類。旧10カテゴリから新6カテゴリへ再編成。アイテムの種類に基づいて自動分類される。
-- **カテゴリマッピング**: 旧カテゴリ名と新カテゴリの対応関係。既存データの後方互換性を維持するために必要。
+- **AuctionCategory**: Classification of auction items, reorganized from ten legacy categories into six new categories. Items are classified automatically by type.
+- **Category mapping**: Relationship between legacy and new category names, required for backward compatibility with existing data.
 
 ## Success Criteria *(mandatory)*
 
 ### Measurable Outcomes
 
-- **SC-001**: プレイヤーがオークションハウスを開いてから目的のカテゴリを見つけるまでのクリック数が、最大1クリック（カテゴリ選択のみ）で完了する
-- **SC-002**: カテゴリ数が10から6に削減され、子供でも全カテゴリの意味を直感的に理解できる
-- **SC-003**: 旧カテゴリで出品されたすべてのアイテムが新カテゴリ体系で漏れなく表示される（データ消失ゼロ）
-- **SC-004**: 「すべて」カテゴリで全アイテムが新着順に正しくソートされて表示される
-- **SC-005**: 英語・日本語の両言語で全カテゴリ名が正しく表示される
+- **SC-001**: Players can find their target category with at most one click (category selection only) after opening the auction house
+- **SC-002**: The category count is reduced from ten to six, with meanings intuitive enough for children to understand
+- **SC-003**: Every item listed under a legacy category appears under the new category system without omissions (zero data loss)
+- **SC-004**: All items in “All” display correctly sorted newest first
+- **SC-005**: All category names display correctly in both language packs (English and Japanese in the original specification)
 
 ## Assumptions
 
-- 「エンチャント」カテゴリはエンチャントが付与された全アイテムを対象とする。エンチャント本だけでなく、エンチャント付き武器・防具・ツールも含む
-- 「ブロック」カテゴリには装飾ブロック（DECORATIONS）も含める。建築用途のアイテムを一箇所にまとめることで直感的にする
-- 「武器装備」カテゴリにはツール（TOOLS）も含める。ピッケル・斧・シャベルなどは装備品として武器と同グループにする。ただしエンチャント付きアイテムは「エンチャント」カテゴリに優先分類される
-- 「その他」カテゴリにはレッドストーン、輸送系、醸造系、および分類不能なアイテムを含める
-- データベースのカテゴリカラムは新カテゴリ名で保存するが、旧カテゴリ名の読み取りもサポートする
-- メインUIの初期表示を「すべて」（新着順）に変更することで、カテゴリ選択画面ではなくアイテム一覧が最初に表示される
+- “Enchantments” includes all enchanted items, including enchanted weapons, armor, and tools as well as enchanted books
+- “Blocks” includes decorative blocks (DECORATIONS). Grouping building-related items together makes the category intuitive
+- “Weapons & Equipment” includes tools (TOOLS). Pickaxes, axes, shovels, and similar equipment are grouped with weapons. Enchanted items take priority in the “Enchantments” category
+- “Others” includes redstone, transportation, brewing, and unclassifiable items
+- The database category column stores new category names while retaining support for reading legacy names
+- Changing the initial main UI to “All” (newest first) means players see the item list before a category selection screen

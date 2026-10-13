@@ -1,39 +1,39 @@
-# Data Model: オークションカテゴリの簡素化
+# Data Model: Simplify Auction Categories
 
 **Date**: 2026-03-24
 **Feature**: 001-simplify-auction-categories
 
 ## Entity: AuctionCategory (enum)
 
-### 新カテゴリ定義
+### New Category Definitions
 
-| Enum値 | 表示名 (EN) | 表示名 (JA) | アイコン Material | 含まれる旧カテゴリ |
+| Enum Value | Display Name (EN) | Legacy Pack Label (English Translation) | Icon Material | Included Legacy Categories |
 |--------|------------|------------|-----------------|-----------------|
-| ALL | All | すべて | CHEST | (フィルタなし) |
-| BLOCKS | Blocks | ブロック | STONE | BUILDING_BLOCKS, DECORATIONS |
-| FOOD | Food | 食品 | APPLE | FOOD |
-| WEAPONS_EQUIPMENT | Weapons & Equipment | 武器装備 | DIAMOND_SWORD | COMBAT, TOOLS |
-| ENCHANTMENTS | Enchantments | エンチャント | ENCHANTED_BOOK | ENCHANTED_BOOKS + エンチャント付き全アイテム |
-| OTHERS | Others | その他 | LAVA_BUCKET | REDSTONE, TRANSPORTATION, BREWING, MISCELLANEOUS |
+| ALL | All | All | CHEST | (no filter) |
+| BLOCKS | Blocks | Blocks | STONE | BUILDING_BLOCKS, DECORATIONS |
+| FOOD | Food | Food | APPLE | FOOD |
+| WEAPONS_EQUIPMENT | Weapons & Equipment | Weapons & Equipment | DIAMOND_SWORD | COMBAT, TOOLS |
+| ENCHANTMENTS | Enchantments | Enchantments | ENCHANTED_BOOK | ENCHANTED_BOOKS + all enchanted items |
+| OTHERS | Others | Others | LAVA_BUCKET | REDSTONE, TRANSPORTATION, BREWING, MISCELLANEOUS |
 
-### 分類ルール（優先度順）
+### Classification Rules (In Priority Order)
 
-1. **エンチャント判定（最優先）**: `ItemMeta.hasEnchants()` または `Material == ENCHANTED_BOOK` → ENCHANTMENTS
-2. **食品判定**: `Material.isEdible` → FOOD
-3. **武器・装備判定**: 剣・弓・防具・ツール（ピッケル・斧・シャベル・鍬）等 → WEAPONS_EQUIPMENT
-4. **ブロック判定**: `Material.isBlock` または装飾系アイテム → BLOCKS
-5. **フォールバック**: 上記に該当しない → OTHERS
+1. **Enchantment check (highest priority)**: `ItemMeta.hasEnchants()` or `Material == ENCHANTED_BOOK` → ENCHANTMENTS
+2. **Food check**: `Material.isEdible` → FOOD
+3. **Weapons and equipment check**: Swords, bows, armor, tools (pickaxes, axes, shovels, hoes), etc. → WEAPONS_EQUIPMENT
+4. **Block check**: `Material.isBlock` or decorative items → BLOCKS
+5. **Fallback**: Items that match none of the above → OTHERS
 
-### 旧カテゴリマッピング（DB互換用）
+### Legacy Category Mapping (For Database Compatibility)
 
-旧カテゴリ名からの変換マップ:
+Conversion map from legacy category names:
 
 ```
 BUILDING_BLOCKS → BLOCKS
 DECORATIONS     → BLOCKS
 FOOD            → FOOD
-COMBAT          → WEAPONS_EQUIPMENT (※エンチャント付きはENCHANTMENTS)
-TOOLS           → WEAPONS_EQUIPMENT (※エンチャント付きはENCHANTMENTS)
+COMBAT          → WEAPONS_EQUIPMENT (enchanted items belong to ENCHANTMENTS)
+TOOLS           → WEAPONS_EQUIPMENT (enchanted items belong to ENCHANTMENTS)
 ENCHANTED_BOOKS → ENCHANTMENTS
 REDSTONE        → OTHERS
 TRANSPORTATION  → OTHERS
@@ -41,27 +41,27 @@ BREWING         → OTHERS
 MISCELLANEOUS   → OTHERS
 ```
 
-**注意**: 旧カテゴリではエンチャント判定を行っていなかったため、旧COMBAT/TOOLSのアイテムにエンチャントが付いているかはDBカテゴリ名だけでは判断できない。表示時にアイテムデータをデシリアライズしてエンチャント有無を再判定する必要がある。
+**Note**: Legacy categories did not check enchantments, so the database category name alone cannot determine whether old COMBAT/TOOLS items are enchanted. Deserialize item data when displaying it to check enchantments again.
 
-## Entity: AuctionItems (テーブル - 変更なし)
+## Entity: AuctionItems (Table - Unchanged)
 
-スキーマ変更は不要。`category` カラム（varchar 50）はそのまま使用。
+No schema change is required. Continue using the `category` column (varchar 50).
 
-- **新規出品**: 新カテゴリ名（BLOCKS, FOOD等）で保存
-- **既存データ**: 旧カテゴリ名（BUILDING_BLOCKS等）のまま保持
-- **読み取り**: クエリ時に旧→新のマッピングを適用
+- **New listings**: Save new category names (BLOCKS, FOOD, etc.)
+- **Existing data**: Keep legacy category names (BUILDING_BLOCKS, etc.)
+- **Reads**: Apply legacy-to-new mapping during queries
 
-### クエリパターン
+### Query Patterns
 
-カテゴリフィルタリングのSQL条件:
+SQL conditions for category filtering:
 
-| 新カテゴリ | WHERE条件 |
+| New Category | WHERE Condition |
 |-----------|----------|
-| ALL | (フィルタなし) |
+| ALL | (no filter) |
 | BLOCKS | category IN ('BLOCKS', 'BUILDING_BLOCKS', 'DECORATIONS') |
 | FOOD | category IN ('FOOD') |
 | WEAPONS_EQUIPMENT | category IN ('WEAPONS_EQUIPMENT', 'COMBAT', 'TOOLS') |
-| ENCHANTMENTS | category IN ('ENCHANTMENTS', 'ENCHANTED_BOOKS') ※ + ランタイムでエンチャント再判定 |
+| ENCHANTMENTS | category IN ('ENCHANTMENTS', 'ENCHANTED_BOOKS') + recheck enchantments at runtime |
 | OTHERS | category IN ('OTHERS', 'REDSTONE', 'TRANSPORTATION', 'BREWING', 'MISCELLANEOUS') |
 
-**ENCHANTMENTS特殊処理**: 旧COMBAT/TOOLSのエンチャント付きアイテムはDB上では旧カテゴリ名のまま。完全な分類にはアイテムデシリアライズ後のエンチャント判定が必要だが、パフォーマンスとの兼ね合いで、旧データについてはDB上のカテゴリ名を信頼するか、初回起動時にマイグレーションするかのトレードオフがある。推奨: 旧データはDB上のカテゴリを信頼し、新規出品のみ正確なエンチャント判定を適用する。
+**Special handling for ENCHANTMENTS**: Enchanted legacy COMBAT/TOOLS items retain their old database category names. Complete classification requires enchantment checks after deserialization, but performance involves a tradeoff between trusting stored categories and migrating on first startup. Recommendation: Trust database categories for legacy data and apply accurate enchantment detection only to new listings.

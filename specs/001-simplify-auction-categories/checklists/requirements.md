@@ -1,4 +1,4 @@
-# Specification Quality Checklist: オークションカテゴリの簡素化
+# Specification Quality Checklist: Simplify Auction Categories
 
 **Purpose**: Validate specification completeness and quality before proceeding to planning
 **Created**: 2026-03-24

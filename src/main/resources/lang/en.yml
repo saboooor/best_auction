@@ -65,6 +65,7 @@ auction:
 
 # Mail System
 mail:
+  collect_button: "Collect Item"
   no_mail: "You have no mail!"
   mail_sent: "Mail sent to {0}!"
   mail_collected: "Mail collected!"
@@ -93,6 +94,7 @@ ui:
   total_items: "Total Items: {0}"
   page_info: "Page {0} / {1}"
   bid_prompt_header: "Bid Information"
+  submit_bid: "Place Bid"
   enter_bid_amount: "Enter your bid amount in chat"
   bid_command_hint: "Command"
   minimum_bid: "Minimum bid"
@@ -139,7 +141,6 @@ ui:
   language_auto: "Auto-detect"
   language_auto_desc: "Automatically detect language from client"
   language_english_desc: "Use English language"
-  language_japanese_desc: "Use Japanese language"
   language_changed: "Language changed to {0}"
   language_change_failed: "Failed to change language"
   settings: "Settings"

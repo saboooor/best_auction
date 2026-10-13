@@ -34,11 +34,10 @@ A comprehensive and feature-rich auction house plugin for Minecraft Paper/Spigot
 - **Mailbox Interface**: Easy access to received items and refunds
 - **Notification System**: Real-time updates on auction status
 
-### 🌐 Multi-Language Support
-- **English & Japanese**: Complete localization for both languages
-- **Cultural Adaptation**: Proper date formats and number displays
-- **Easy Language Switching**: In-game language selection
-- **Extensible System**: Easy to add more languages
+### 🌐 English Language Support
+- **English Interface**: English messages throughout the plugin
+- **Display Formatting**: Configurable date formats and readable number displays
+- **Language Resources**: Messages managed through the English language file
 
 ### 🔍 Advanced Search & Filtering
 - **Category Search**: Browse items by category (weapons, tools, etc.)
@@ -121,7 +120,7 @@ A comprehensive and feature-rich auction house plugin for Minecraft Paper/Spigot
 | **Vault Integration** | Universal economy plugin support |
 | **Mail System** | Automatic item delivery and refunds |
 | **Search** | Advanced filtering and search capabilities |
-| **Multi-Language** | English and Japanese support |
+| **Language** | English interface and messages |
 | **Economy Integration** | Vault API compatibility |
 | **Real-Time Updates** | Live countdown and status updates |
 | **Cloud Integration** | Web interface and REST API |
@@ -141,7 +140,7 @@ A comprehensive and feature-rich auction house plugin for Minecraft Paper/Spigot
 ## 🔧 Configuration Example
 
 **Language Settings:**
-`language: "en"` - Set language (en, ja)
+`language: "en"` - Use English messages
 
 **Auction Settings:**
 `default_duration: 228` - Auction duration in hours (9.5 days)
@@ -256,8 +255,8 @@ Adapt to any server's needs with extensive configuration options.
 ### **Reliable & Secure**
 Built with modern development practices and comprehensive error handling.
 
-### **Multi-Language**
-Perfect for international servers with English and Japanese support.
+### **English Interface**
+Clear English messages throughout the auction house.
 
 ### **Active Development**
 Regular updates and improvements based on community feedback.

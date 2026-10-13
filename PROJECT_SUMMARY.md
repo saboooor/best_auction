@@ -1,200 +1,200 @@
-# 🏪 Best Auction Plugin - プロジェクトサマリー
+# 🏪 Best Auction Plugin - Project Summary
 
-## 📋 プロジェクト概要
+## 📋 Project Overview
 
-**プロジェクト名:** Best Auction Plugin  
-**開発期間:** 2024年12月  
-**開発者:** 0x48lab with Claude Code  
-**言語:** Kotlin  
-**プラットフォーム:** Minecraft Paper/Spigot 1.20+  
+**Project name:** Best Auction Plugin
+**Development period:** December 2024
+**Developer:** 0x48lab with Claude Code
+**Language:** Kotlin
+**Platform:** Minecraft Paper/Spigot 1.20+
 
-## 🎯 プロジェクトの目的
+## 🎯 Project Purpose
 
-Minecraft サーバー向けの包括的なオークションハウスシステムを提供し、プレイヤーが安全で使いやすい市場でアイテムの売買を行えるようにする。特に日本語圏のユーザーを意識した多言語対応と、高度な設定機能を備えた本格的なプラグインの開発。
+Provide a comprehensive auction house system for Minecraft servers, allowing players to buy and sell items in a safe, easy-to-use marketplace. Develop a full-featured plugin with advanced configuration and multi-language support, with particular attention to Japanese-speaking users.
 
-## ✨ 主要機能・特徴
+## ✨ Main Features
 
-### 🏪 コア機能
-- **オークションシステム**: 出品、入札、即決購入の完全対応
-- **メールシステム**: 落札品・返金の自動配送機能
-- **検索・フィルタ**: 6つのシンプルなカテゴリ（すべて・ブロック・食品・武器装備・エンチャント・その他）とキーワード検索
-- **リアルタイム表示**: 残り時間とオークション状況の即座更新
+### 🏪 Core Functionality
+- **Auction system**: Full support for listing, bidding, and buy-it-now purchases
+- **Mail system**: Automatic delivery of auction winnings and refunds
+- **Search and filtering**: Six simple categories (All, Blocks, Food, Weapons & Equipment, Enchantments, and Others) plus keyword search
+- **Real-time display**: Immediate updates to time remaining and auction status
 
-### 🌐 ユーザビリティ
-- **多言語対応**: 日本語・英語の完全サポート
-- **直感的GUI**: Minecraftの標準UIを活用した使いやすいインターフェース
-- **K/M/B表記**: 大きな金額の見やすい省略表示
-- **詳細な情報表示**: 入札状況、最低価格、即決価格の明確な表示
+### 🌐 Usability
+- **Multi-language support**: Full Japanese and English support in the original release
+- **Intuitive GUI**: Easy-to-use interface based on Minecraft's standard UI
+- **K/M/B notation**: Readable abbreviations for large amounts
+- **Detailed information**: Clear display of bid status, minimum prices, and buyout prices
 
-### ⚙️ 管理・設定機能
-- **柔軟な設定**: 手数料、期間、通貨表示の細かな調整
-- **データベース管理**: SQLiteによる安全なデータ保存
-- **経済連携**: Vault APIによる既存経済プラグインとの統合
-- **デバッグモード**: 開発・テスト用機能の制御
+### ⚙️ Administration and Configuration
+- **Flexible configuration**: Fine control over fees, duration, and currency display
+- **Database management**: Safe data storage with SQLite
+- **Economy integration**: Integration with existing economy plugins through the Vault API
+- **Debug mode**: Controls for development and testing features
 
-## 🏗️ 技術仕様
+## 🏗️ Technical Specifications
 
-### アーキテクチャ
+### Architecture
 ```
-├── データベース層 (Exposed ORM + SQLite)
-│   ├── AuctionItems (オークションアイテム)
-│   ├── Bids (入札情報)
-│   ├── MailBox (メールシステム)
-│   └── Settings (各種設定)
+├── Database layer (Exposed ORM + SQLite)
+│   ├── AuctionItems (auction items)
+│   ├── Bids (bid information)
+│   ├── MailBox (mail system)
+│   └── Settings (configuration)
 │
-├── ビジネスロジック層
-│   ├── AuctionManager (オークション管理)
-│   ├── MailManager (メール管理)
-│   └── LangManager (言語管理)
+├── Business logic layer
+│   ├── AuctionManager (auction management)
+│   ├── MailManager (mail management)
+│   └── LangManager (language management)
 │
-├── プレゼンテーション層
-│   ├── AuctionUI (メインGUI)
-│   ├── LanguageSettingsUI (言語設定)
-│   └── Commands (コマンド処理)
+├── Presentation layer
+│   ├── AuctionUI (main GUI)
+│   ├── LanguageSettingsUI (language settings)
+│   └── Commands (command handling)
 │
-└── ユーティリティ層
-    ├── ItemUtils (アイテム処理)
-    └── 各種ヘルパー関数
+└── Utility layer
+    ├── ItemUtils (item handling)
+    └── Helper functions
 ```
 
-### 技術スタック
-- **言語**: Kotlin 1.9.24
-- **ビルドツール**: Gradle with Kotlin DSL
-- **フレームワーク**: PaperMC API 1.20.6
-- **データベース**: Jetbrains Exposed ORM + SQLite
-- **経済連携**: Vault API
+### Technology Stack
+- **Language**: Kotlin 1.9.24
+- **Build tool**: Gradle with Kotlin DSL
+- **Framework**: PaperMC API 1.20.6
+- **Database**: Jetbrains Exposed ORM + SQLite
+- **Economy integration**: Vault API
 - **CI/CD**: GitHub Actions
 
-## 📊 開発進捗・成果物
+## 📊 Development Progress and Deliverables
 
-### 🎯 完了した機能
+### 🎯 Completed Features
 
-#### Phase 1: 基本機能 ✅
-- [x] オークションシステムの基盤実装
-- [x] データベース設計・構築
-- [x] 基本的なGUIインターフェース
-- [x] コマンドシステム
+#### Phase 1: Basic Functionality ✅
+- [x] Auction system foundation
+- [x] Database design and construction
+- [x] Basic GUI interface
+- [x] Command system
 
-#### Phase 2: 高度な機能 ✅
-- [x] 入札システムの改善（重複防止、価格表示修正）
-- [x] K/M/B金額表記対応
-- [x] 多言語システムの実装
-- [x] Vault経済連携の強化
+#### Phase 2: Advanced Features ✅
+- [x] Improved bidding system (duplicate prevention and price display fixes)
+- [x] K/M/B amount notation
+- [x] Multi-language system implementation
+- [x] Improved Vault economy integration
 
-#### Phase 3: UX/設定改善 ✅
-- [x] 残り時間表示機能
-- [x] 設定可能な日付フォーマット
-- [x] 設定可能なオークション期間
-- [x] デバッグコマンドの制御機能
+#### Phase 3: UX and Configuration Improvements ✅
+- [x] Time remaining display
+- [x] Configurable date format
+- [x] Configurable auction duration
+- [x] Debug command controls
 
-#### Phase 4: デプロイメント ✅
-- [x] GitHub Actionsによる自動デプロイ
-- [x] Modrinth連携設定
-- [x] 包括的なドキュメント作成
-- [x] ライセンス・README整備
+#### Phase 4: Deployment ✅
+- [x] Automatic deployment with GitHub Actions
+- [x] Modrinth integration configuration
+- [x] Comprehensive documentation
+- [x] License and README preparation
 
-### 📈 技術的な改善点
+### 📈 Technical Improvements
 
-1. **データベースファーストアプローチ**: Loreベースからデータベースベースへの移行により、データの整合性と信頼性を大幅向上
+1. **Database-first approach**: Moving from lore-based to database-based processing greatly improved data consistency and reliability
 
-2. **包括的なエラーハンドリング**: フォールバック機能を備えた堅牢なシステム設計
+2. **Comprehensive error handling**: Robust system design with fallback capabilities
 
-3. **パフォーマンス最適化**: 非同期処理とキャッシュ機能による快適な動作
+3. **Performance optimization**: Smooth operation through asynchronous processing and caching
 
-4. **設定の柔軟性**: 管理者が環境に応じて細かく調整可能な設定システム
+4. **Configuration flexibility**: Settings that administrators can fine-tune for their environment
 
-## 🚀 デプロイメント・配布
+## 🚀 Deployment and Distribution
 
-### 自動化システム
-- **GitHub Actions**: タグベースの自動ビルド・デプロイ
-- **Modrinth**: プラグイン配布プラットフォームへの自動アップロード
-- **GitHub Releases**: リリースノート自動生成
+### Automation
+- **GitHub Actions**: Tag-based automatic builds and deployment
+- **Modrinth**: Automatic uploads to the plugin distribution platform
+- **GitHub Releases**: Automatic release note generation
 
-### 配布チャネル
-- **Modrinth**: メインの配布プラットフォーム
-- **GitHub Releases**: 開発者・上級ユーザー向け
-- **直接ダウンロード**: JARファイルの直接配布
+### Distribution Channels
+- **Modrinth**: Primary distribution platform
+- **GitHub Releases**: For developers and advanced users
+- **Direct download**: Direct distribution of JAR files
 
-## 📚 ドキュメント・サポート
+## 📚 Documentation and Support
 
-### 作成したドキュメント
-1. **PLUGIN_DOCUMENTATION.md**: 包括的なユーザー・管理者ガイド
-2. **README.md**: プロジェクト概要とクイックスタート
-3. **CLAUDE.md**: 開発者向けガイドと技術仕様
-4. **MODRINTH_SETUP.md**: デプロイメント設定ガイド
+### Documentation Produced
+1. **PLUGIN_DOCUMENTATION.md**: Comprehensive user and administrator guide
+2. **README.md**: Project overview and quickstart
+3. **CLAUDE.md**: Developer guide and technical specifications
+4. **MODRINTH_SETUP.md**: Deployment configuration guide
 
-### サポート体制
-- GitHub Issues での問題報告
-- 詳細なトラブルシューティングガイド
-- 設定例とベストプラクティス
+### Support Resources
+- Problem reporting through GitHub Issues
+- Detailed troubleshooting guide
+- Configuration examples and best practices
 
-## 🎯 プロジェクトの成果
+## 🎯 Project Results
 
-### 技術的成果
-- **堅牢なアーキテクチャ**: スケーラブルで保守性の高いコード設計
-- **国際化対応**: 真の多言語プラグインとしての実装
-- **自動化されたCI/CD**: 効率的な開発・リリースプロセス
-- **包括的なテスト**: エラーハンドリングとフォールバック機能
+### Technical Results
+- **Robust architecture**: Scalable, maintainable code design
+- **Internationalization**: Implementation as a fully multilingual plugin
+- **Automated CI/CD**: Efficient development and release process
+- **Comprehensive testing**: Error handling and fallback functionality
 
-### ユーザー体験の向上
-- **直感的なUI**: Minecraftプレイヤーに馴染みのあるインターフェース
-- **多言語対応**: 日本語ユーザーへの配慮
-- **詳細な情報表示**: 透明性の高いオークション情報
-- **柔軟な設定**: サーバー管理者のニーズに対応
+### User Experience Improvements
+- **Intuitive UI**: Interface familiar to Minecraft players
+- **Multi-language support**: Consideration for Japanese-speaking users
+- **Detailed information**: Transparent auction information
+- **Flexible configuration**: Meets server administrators' needs
 
-### 開発プロセスの革新
-- **AI支援開発**: Claude Codeとの協働による効率的な開発
-- **段階的な改善**: ユーザーフィードバックに基づく継続的改善
-- **ドキュメント重視**: 保守性と拡張性を考慮した設計
+### Development Process Improvements
+- **AI-assisted development**: Efficient development in collaboration with Claude Code
+- **Incremental improvement**: Continuous improvements based on user feedback
+- **Documentation focus**: Design with maintainability and extensibility in mind
 
-## 🔮 今後の展望
+## 🔮 Future Outlook
 
-### 潜在的な拡張機能
-- **オークション履歴**: 過去の取引データの表示
-- **統計ダッシュボード**: 市場動向の分析機能
-- **自動入札**: プレイヤー設定による自動入札機能
-- **カテゴリカスタマイズ**: サーバー独自のカテゴリ設定
+### Potential Extensions
+- **Auction history**: Display past transaction data
+- **Statistics dashboard**: Market trend analysis
+- **Automatic bidding**: Player-configured automatic bidding
+- **Custom categories**: Server-specific category settings
 
-### 技術的改善
-- **MySQL対応**: 大規模サーバー向けのデータベース選択肢
-- **Redis連携**: キャッシュ機能の強化
-- **API提供**: 他プラグインとの連携機能
-- **Webインターフェース**: ブラウザからの管理機能
+### Technical Improvements
+- **MySQL support**: Database option for large servers
+- **Redis integration**: Improved caching
+- **API access**: Integration with other plugins
+- **Web interface**: Browser-based administration
 
-## 📊 プロジェクト指標
+## 📊 Project Metrics
 
-### コード品質
-- **言語**: Kotlin（100%）
-- **総行数**: 約3,000行
-- **ファイル数**: 25+
-- **テストカバレッジ**: 主要機能をカバー
+### Code Quality
+- **Language**: Kotlin (100%)
+- **Total lines**: Approximately 3,000
+- **File count**: 25+
+- **Test coverage**: Covers main features
 
-### 機能カバレッジ
-- **コマンド**: 8つの主要コマンド
-- **UI画面**: 5つのメインGUI
-- **設定項目**: 20+の設定可能項目
-- **言語**: 2言語（日英）完全対応
+### Feature Coverage
+- **Commands**: Eight main commands
+- **UI screens**: Five main GUIs
+- **Configuration**: More than 20 configurable settings
+- **Languages**: Full support for two languages (Japanese and English) in the original release
 
-### ドキュメント
-- **ユーザーガイド**: 2,000+語
-- **技術文書**: 1,500+語
-- **設定ガイド**: 1,000+語
-- **API文書**: 完全なKotlinDoc
+### Documentation
+- **User guide**: 2,000+ words
+- **Technical documentation**: 1,500+ words
+- **Configuration guide**: 1,000+ words
+- **API documentation**: Complete KotlinDoc
 
-## 🏆 プロジェクトの特徴・差別化要因
+## 🏆 Distinguishing Features
 
-1. **真の多言語対応**: 単なる翻訳ではなく、文化的配慮を含む本格的な国際化
+1. **Full multi-language support**: Comprehensive internationalization with cultural considerations beyond translation
 
-2. **エンタープライズレベルの設計**: 大規模サーバーでも安定動作する堅牢なアーキテクチャ
+2. **Enterprise-level design**: Robust architecture for stable operation even on large servers
 
-3. **開発者フレンドリー**: 豊富なドキュメントと拡張可能な設計
+3. **Developer-friendly**: Extensive documentation and extensible design
 
-4. **ユーザー中心設計**: 実際の使用体験を重視したUI/UX
+4. **User-centered design**: UI/UX focused on practical usage
 
-5. **自動化されたリリース**: 継続的なメンテナンスと改善を支える仕組み
+5. **Automated releases**: Infrastructure supporting continuous maintenance and improvement
 
 ---
 
-**このプロジェクトは、現代的な開発手法とAI支援を活用して、Minecraftコミュニティに価値のあるツールを提供する成功例として位置づけられます。**
+**This project demonstrates how modern development methods and AI assistance can deliver a valuable tool to the Minecraft community.**
 
-*2024年12月作成 - Best Auction Plugin開発チーム*
+*Created in December 2024 - Best Auction Plugin Development Team*

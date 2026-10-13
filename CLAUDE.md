@@ -2,110 +2,96 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## プロジェク概要
+## Project Overview
 
-Best Auctionは、Minecraft Paper/Spigotサーバー用のオークションハウスプラグインです。Kotlinで書かれており、プレイヤーがアイテムを出品・入札・購入できるシステムを提供します。
+Best Auction is an auction house plugin for Minecraft Paper/Spigot servers. Written in Kotlin, it lets players list, bid on, and purchase items.
 
-## ビルド・実行コマンド
+## Build and Run Commands
 
-### 基本的なGradleコマンド
-- `./gradlew build` - プロジェクトをビルド（shadowJarを含む）
-- `./gradlew shadowJar` - Fat JARファイルを生成（全依存関係を含む）
-- `./gradlew runServer` - 開発用Minecraftサーバーを起動（1.20版）
+### Basic Gradle Commands
+- `./gradlew build` - Build the project (including shadowJar)
+- `./gradlew shadowJar` - Generate a fat JAR (including all dependencies)
+- `./gradlew runServer` - Start a development Minecraft server (version 1.20)
 
-### 開発用コマンド
-- プラグインJAR: `build/libs/best_auction-1.0-SNAPSHOT-all.jar`
-- サーバー設定ディレクトリ: `run/`
-- プラグイン設定ディレクトリ: `run/plugins/best_auction/`
+### Development Paths
+- Plugin JAR: `build/libs/best_auction-1.0-SNAPSHOT-all.jar`
+- Server configuration directory: `run/`
+- Plugin configuration directory: `run/plugins/best_auction/`
 
-## アーキテクチャ
+## Architecture
 
-このプラグインは以下の主要コンポーネントで構成されています：
+The plugin consists of the following main components:
 
-### データベース層
-- **DatabaseManager**: SQLiteデータベースの初期化・管理
-- **Tables.kt**: Exposed ORMを使用したテーブル定義
-  - AuctionItems: オークションアイテム情報
-  - Bids: 入札情報  
-  - MailBox: メールシステム
-  - AuctionSettings: オークション設定
-  - PlayerLanguageSettings: プレイヤー言語設定
+### Database Layer
+- **DatabaseManager**: SQLite database initialization and management
+- **Tables.kt**: Table definitions using Exposed ORM
+  - AuctionItems: Auction item information
+  - Bids: Bid information
+  - MailBox: Mail system
+  - AuctionSettings: Auction settings
+  - PlayerLanguageSettings: Player language settings
 
-### 管理クラス
-- **AuctionManager**: オークションの出品・入札・キャンセル処理
-- **MailManager**: アイテムメール送信システム
+### Manager Classes
+- **AuctionManager**: Auction listing, bidding, and cancellation handling
+- **MailManager**: Item mail delivery system
 
-### UI・ハンドラー
-- **AuctionUI**: メインオークションハウスGUI
-- **LanguageSettingsUI**: 言語設定GUI
-- **BidHandler**: 入札処理イベントハンドラー
-- **SearchHandler**: 検索機能ハンドラー
+### UI and Handlers
+- **AuctionUI**: Main auction house GUI
+- **LanguageSettingsUI**: Language settings GUI
+- **BidHandler**: Event handler for bidding
+- **SearchHandler**: Search handler
 
-### データクラス
-- **AuctionData.kt**: オークション関連のデータクラス定義
-- **ItemUtils**: アイテム関連のユーティリティ（シリアライゼーション、価格計算等）
+### Data Classes
+- **AuctionData.kt**: Auction-related data class definitions
+- **ItemUtils**: Item utilities (serialization, price calculation, etc.)
 
-### 多言語対応
-- **LangManager**: 言語管理システム
-- 言語ファイル: `src/main/resources/lang/` (en.yml, ja.yml)
+### Language Resources
+- **LangManager**: Language management system
+- English language file: `src/main/resources/lang/en.yml`
 
-## 技術スタック
+## Technology Stack
 
-- **言語**: Kotlin 1.9.24
-- **ビルドツール**: Gradle with Kotlin DSL
-- **フレームワーク**: PaperMC API 1.20.6
-- **データベース**: Jetbrains Exposed ORM + SQLite
-- **経済プラグイン**: Vault API連携
+- **Language**: Kotlin 1.9.24
+- **Build Tool**: Gradle with Kotlin DSL
+- **Framework**: PaperMC API 1.20.6
+- **Database**: Jetbrains Exposed ORM + SQLite
+- **Economy Plugin**: Vault API integration
 
-## 設定ファイル
+## Configuration Files
 
-- `src/main/resources/config.yml`: メイン設定（手数料、期間、UI設定等）
-- `src/main/resources/plugin.yml`: Bukkitプラグイン定義
-- `run/plugins/best_auction/config.yml`: 実行時設定ファイル
+- `src/main/resources/config.yml`: Main configuration (fees, duration, UI settings, etc.)
+- `src/main/resources/plugin.yml`: Bukkit plugin definition
+- `run/plugins/best_auction/config.yml`: Runtime configuration file
 
-## 開発時の注意事項
+## Development Guidelines
 
-- データベース操作は全て`transaction`ブロック内で実行
-- アイテムのシリアライゼーション/デシリアライゼーションは`ItemUtils`を使用
-- 多言語メッセージは`LangManager`経由で取得
-- 経済システムはVault APIを通じてアクセス
-- UIはMinecraftのインベントリGUIシステムを使用
+- Perform all database operations inside `transaction` blocks
+- Use `ItemUtils` for item serialization and deserialization
+- Retrieve localized messages through `LangManager`
+- Access the economy system through the Vault API
+- Use Minecraft's inventory GUI system for the UI
 
-## 多言語対応の重要ルール
+## Important Message Rules
 
-**重要**: このプラグインは子供が使用することを想定しています。そのため、以下のルールを厳守してください：
+**Important**: This plugin is intended for children. Keep messages clear and easy to understand.
 
-1. **すべてのユーザー向けメッセージは多言語対応必須**
-   - ハードコードされた英語メッセージは禁止
-   - 必ず`LangManager`を通じてメッセージを取得
-   - 新しいメッセージは必ず`en.yml`と`ja.yml`の両方に追加
+1. **All user-facing messages must be in English**
+   - Retrieve messages through `LangManager`
+   - Add new messages to `src/main/resources/lang/en.yml`
+   - The project uses English only; do not reference or load `ja.yml`
 
-2. **日本語設定時の完全な日本語化**
-   - config.ymlで`language: "ja"`が設定されている場合
-   - すべてのメッセージ、UI、エラー、通知は日本語で表示
-   - 英語が混在することは許可されない
-
-3. **メッセージ追加時の手順**
+2. **Procedure for Adding Messages**
    ```kotlin
-   // 悪い例 - ハードコードされたメッセージ
-   sender.sendMessage("§aCloud sync completed!")
-   
-   // 良い例 - LangManagerを使用
-   plugin.langManager.sendMessage(sender, "cloud.sync.completed")
+   // Retrieve the English message through LangManager
+   plugin.langManager.sendMessage(sender, "cloud.sync_completed", auctionCount, bidCount)
    ```
 
-4. **言語ファイルの構造**
-   - `src/main/resources/lang/en.yml` - 英語メッセージ
-   - `src/main/resources/lang/ja.yml` - 日本語メッセージ
-   - 両ファイルは同じキー構造を維持
-
-5. **デバッグメッセージの例外**
-   - ログ出力（`plugin.logger`）は英語でOK
-   - ただし、ユーザーに表示されるものは多言語対応必須
+3. **Debug Messages**
+   - Log output (`plugin.logger`) must also be in English
 
 ## Active Technologies
 - Kotlin 1.9.24 + PaperMC API 1.21.4, Jetbrains Exposed ORM 0.44.1, Vault API (001-simplify-auction-categories)
-- SQLite (Exposed ORM経由) (001-simplify-auction-categories)
+- SQLite (via Exposed ORM) (001-simplify-auction-categories)
 
 ## Recent Changes
 - 001-simplify-auction-categories: Added Kotlin 1.9.24 + PaperMC API 1.21.4, Jetbrains Exposed ORM 0.44.1, Vault API

@@ -1,181 +1,181 @@
-# Best Auction クラウド連携設定ガイド
+# Best Auction Cloud Integration Setup Guide
 
-このガイドでは、Best Auctionプラグインのクラウド連携機能を設定する手順を説明します。
+This guide explains how to configure cloud integration for the Best Auction plugin.
 
-## 📋 前提条件
+## 📋 Prerequisites
 
-- Best Auctionプラグインがインストール済み
-- サーバーがインターネットに接続可能
-- Cloudflare Workersアカウント（無料プランでOK）
+- The Best Auction plugin is installed
+- The server can connect to the internet
+- A Cloudflare Workers account (the free plan is sufficient)
 
-## 🚀 設定手順
+## 🚀 Setup Steps
 
-### ステップ1: Cloudflare Workersのセットアップ
+### Step 1: Set Up Cloudflare Workers
 
-1. [Cloudflare](https://www.cloudflare.com/)にアクセスしてアカウントを作成
-2. ダッシュボードから「Workers & Pages」を選択
-3. 新しいWorkerを作成
-4. Best Auction用のWorkerコードをデプロイ（[こちら](https://github.com/0x48lab/best-auction-cloud-worker)から取得）
+1. Visit [Cloudflare](https://www.cloudflare.com/) and create an account
+2. Select “Workers & Pages” from the dashboard
+3. Create a new Worker
+4. Deploy the Worker code for Best Auction (available [here](https://github.com/0x48lab/best-auction-cloud-worker))
 
-### ステップ2: APIトークンの取得
+### Step 2: Obtain an API Token
 
-#### 方法1: コンソールコマンドを使用（推奨）
+#### Method 1: Use Console Commands (Recommended)
 
-1. Minecraftサーバーのコンソールで以下を実行：
+1. Run the following in your Minecraft server console:
    ```
    ah cloud gettoken
    ```
 
-2. 表示されるURLとインストラクションに従ってトークンを取得
+2. Follow the displayed URL and instructions to obtain a token
 
-3. 取得したトークンをコンソールで設定：
+3. Set the token in the console:
    ```
    ah cloud settoken YOUR_API_TOKEN_HERE
    ```
 
-#### 方法2: 手動で設定ファイルを編集
+#### Method 2: Edit the Configuration File Manually
 
-1. サーバーを停止
-2. `plugins/best_auction/config.yml`を開く
-3. 以下の設定を編集
+1. Stop the server
+2. Open `plugins/best_auction/config.yml`
+3. Edit the settings below
 
-### ステップ3: config.ymlの設定
+### Step 3: Configure config.yml
 
 ```yaml
-# クラウド連携設定
+# Cloud integration settings
 cloud:
-  # クラウド連携を有効化
+  # Enable cloud integration
   enabled: true
   
-  # Cloudflare WorkersのベースURL
-  # 例: https://best-auction.your-username.workers.dev
+  # Cloudflare Workers base URL
+  # Example: https://best-auction.your-username.workers.dev
   base_url: "https://your-worker.your-subdomain.workers.dev"
   
-  # APIトークン（ステップ2で取得したもの）
+  # API token (obtained in Step 2)
   api_token: "your-api-token-here"
   
-  # サーバー識別子（複数サーバーがある場合は各サーバーで異なる値に）
+  # Server identifier (use a different value for each server if you have multiple servers)
   server_id: "server-1"
   
-  # 認証設定
+  # Authentication settings
   auth:
-    # 起動時にトークンを自動検証
+    # Automatically validate the token on startup
     validate_on_startup: true
     
-    # トークン再検証間隔（分）
+    # Token revalidation interval (minutes)
     revalidate_interval: 60
   
-  # データ同期設定
+  # Data synchronization settings
   sync:
-    # 初回起動時に既存データを自動同期
+    # Automatically synchronize existing data on the first startup
     auto_sync_on_startup: true
     
-    # バッチサイズ（一度に送信するオークション数）
+    # Batch size (number of auctions sent at once)
     batch_size: 50
     
-    # バッチ間の待機時間（ミリ秒）
+    # Delay between batches (milliseconds)
     batch_delay: 1000
     
-    # 入札情報も同期する
+    # Synchronize bid information as well
     include_bids: true
   
-  # HTTPリクエストタイムアウト（ミリ秒）
+  # HTTP request timeout (milliseconds)
   timeout: 5000
   
-  # リトライ設定
+  # Retry settings
   retry_attempts: 3
   retry_delay: 1000
   
-  # イベントタイプ別の有効/無効設定
+  # Enable or disable individual event types
   events:
-    item_listed: true      # アイテム出品時
-    bid_placed: true       # 入札時
-    bid_cancelled: true    # 入札キャンセル時
-    auction_cancelled: true # オークションキャンセル時
-    item_sold: true        # 落札時
+    item_listed: true      # When an item is listed
+    bid_placed: true       # When a bid is placed
+    bid_cancelled: true    # When a bid is cancelled
+    auction_cancelled: true # When an auction is cancelled
+    item_sold: true        # When an item is sold
 ```
 
-### ステップ4: 設定の確認
+### Step 4: Verify the Configuration
 
-1. サーバーを起動
+1. Start the server
 
-2. 以下のコマンドで連携状態を確認：
+2. Check the integration status with the following command:
    ```
    /ah cloud status
    ```
 
-3. トークンの検証：
+3. Validate the token:
    ```
    /ah cloud validate
    ```
 
-### ステップ5: 初回データ同期（オプション）
+### Step 5: Initial Data Synchronization (Optional)
 
-既存のオークションデータをクラウドに同期する場合：
+To synchronize existing auction data to the cloud:
 
 ```
 /ah cloud sync
 ```
 
-強制的に全データを再同期する場合：
+To force a full resynchronization:
 
 ```
 /ah cloud sync force
 ```
 
-## 🔍 動作確認
+## 🔍 Verify Operation
 
-1. アイテムを出品してみる：
+1. Try listing an item:
    ```
    /ah sell 1000
    ```
 
-2. サーバーログを確認：
-   - `[CloudEvent] Event sent successfully: ITEM_LISTED` が表示されればOK
+2. Check the server log:
+   - If `[CloudEvent] Event sent successfully: ITEM_LISTED` appears, the event was sent successfully
 
-3. Cloudflare Workersのログでリクエストを確認
+3. Check the requests in the Cloudflare Workers logs
 
-## ❌ トラブルシューティング
+## ❌ Troubleshooting
 
-### エラー: "Cloud integration is disabled in config"
-→ `config.yml`で`cloud.enabled: true`に設定
+### Error: "Cloud integration is disabled in config"
+→ Set `cloud.enabled: true` in `config.yml`
 
-### エラー: "Cloud base URL not configured"
-→ `cloud.base_url`にWorkerのURLを設定
+### Error: "Cloud base URL not configured"
+→ Set `cloud.base_url` to your Worker's URL
 
-### エラー: "Cloud API token not configured"
-→ `cloud.api_token`にトークンを設定
+### Error: "Cloud API token not configured"
+→ Set your token in `cloud.api_token`
 
-### エラー: "Cloud API token is not valid"
-→ トークンが無効。新しいトークンを取得して設定
+### Error: "Cloud API token is not valid"
+→ The token is invalid. Obtain and configure a new token
 
-### エラー: "timestamp: Invalid datetime format"
-→ プラグインを最新版にアップデート（タイムスタンプ形式が修正済み）
+### Error: "timestamp: Invalid datetime format"
+→ Update the plugin to the latest version (the timestamp format has been fixed)
 
-### イベントが送信されない
-1. `/ah cloud status`で状態を確認
-2. `cloud.events`セクションで該当イベントがtrueになっているか確認
-3. サーバーログで`[CloudEvent]`メッセージを確認
+### Events Are Not Being Sent
+1. Check the status with `/ah cloud status`
+2. Check that the relevant event is set to true in the `cloud.events` section
+3. Check the server log for `[CloudEvent]` messages
 
-## 📊 ログの確認方法
+## 📊 Checking Logs
 
-詳細なログを表示するには、`server.properties`で以下を設定：
+To display detailed logs, configure the following in `server.properties`:
 
 ```properties
-# ログレベルをFINEに設定（デバッグ用）
+# Set the log level to FINE (for debugging)
 java.util.logging.ConsoleHandler.level=FINE
 ```
 
-または、`plugins/best_auction/`にログファイルが生成される場合はそちらを確認。
+Alternatively, check any log files generated in `plugins/best_auction/`.
 
-## 🔒 セキュリティ上の注意
+## 🔒 Security Notes
 
-- APIトークンは秘密情報です。GitHubなどに公開しないでください
-- トークンが漏洩した場合は、Cloudflare Workersで新しいトークンを生成してください
-- HTTPSを使用してデータは暗号化されています
+- API tokens are secret. Do not publish them on GitHub or elsewhere
+- If a token is leaked, generate a new one in Cloudflare Workers
+- Data is encrypted using HTTPS
 
-## 📞 サポート
+## 📞 Support
 
-問題が解決しない場合は：
-1. [GitHub Issues](https://github.com/0x48lab/best_auction/issues)で報告
-2. 詳細なエラーログを含めてください
+If the problem persists:
+1. Report it on [GitHub Issues](https://github.com/0x48lab/best_auction/issues)
+2. Include detailed error logs

@@ -5,66 +5,72 @@
 [![License](https://img.shields.io/github/license/0x48lab/best_auction)](LICENSE)
 [![Java](https://img.shields.io/badge/Java-17+-orange.svg)](https://adoptium.net/)
 
-完全な機能を備えたMinecraft Paper/Spigotサーバー用オークションハウスプラグインです。プレイヤーがアイテムを出品・入札・購入できる包括的な市場システムを提供します。
+A fully featured auction house plugin for Minecraft Paper/Spigot servers. It provides a comprehensive marketplace where players can list, bid on, and purchase items.
 
-## ✨ 主な機能
+## ✨ Key Features
 
-- 🏪 **完全なオークションシステム** - 出品、入札、即決購入
-- 💰 **Vault経済連携** - 既存の経済プラグインとシームレスに統合
-- 📬 **メールシステム** - アイテムと返金の自動配送
-- 🌐 **多言語対応** - 日本語・英語完全対応
-- 🔍 **シンプルなカテゴリ** - 6つの直感的なカテゴリ（すべて・ブロック・食品・武器装備・エンチャント・その他）
-- 🔍 **高度な検索** - キーワード検索
-- ⏰ **残り時間表示** - リアルタイムでオークション終了時間を表示
-- ⚙️ **高度な設定** - 手数料、期間、通貨表示など細かく調整可能
-- 📊 **K/M/B表記** - 大きな金額の見やすい表示
-- ☁️ **クラウド連携** - オークションデータの外部同期とイベント送信
+- 🏪 **Complete Auction System** - Listing, bidding, and buy-it-now purchases
+- 💰 **Vault Economy Integration** - Seamless integration with existing economy plugins
+- 📬 **Mail System** - Automatic delivery of items and refunds
+- 🌐 **English Interface** - English messages and language resources
+- 🔍 **Simple Categories** - Six intuitive categories (All, Blocks, Food, Weapons & Equipment, Enchantments, and Others)
+- 🔍 **Advanced Search** - Keyword search
+- ⏰ **Time Remaining** - Real-time display of auction end times
+- ⚙️ **Advanced Configuration** - Fine control over fees, duration, currency display, and more
+- 📊 **K/M/B Notation** - Readable display of large amounts
+- ☁️ **Cloud Integration** - External synchronization of auction data and event reporting
 
-## 🛠️ 必要要件
+## 🛠️ Requirements
 
-- **Minecraft**: 1.20.1+
-- **サーバー**: Paper/Spigot
-- **Java**: 17+
-- **依存関係**: 
-  - Vault（推奨）
-  - 経済プラグイン（EssentialsX等）
+- **Minecraft**: 1.21.10+
+- **Server**: Paper
+- **Java**: 21+
+- **Dependencies**:
+  - Vault (recommended)
+  - An economy plugin (such as EssentialsX)
 
-## 📥 インストール
+The main `/ah` menu uses a native dialog for Java players and a native form for
+Bedrock players connected through Geyser and Floodgate. Floodgate is optional;
+install it on the server running this plugin to enable Bedrock player detection
+and forms. Category listings, bids, and mailbox open the existing inventory screens.
+Language follows the client locale, falling back to the server default when unavailable. Search uses the text field in the Java dialog or a native input form on Bedrock.
 
-### Modrinthから（推奨）
-1. [Modrinthページ](https://modrinth.com/plugin/best-auction)からダウンロード
-2. `plugins/`フォルダに配置
-3. サーバーを再起動
+## 📥 Installation
 
-### GitHubから
-1. [Releases](https://github.com/0x48lab/best_auction/releases)から最新版をダウンロード
-2. `plugins/`フォルダに配置
-3. サーバーを再起動
+### From Modrinth (Recommended)
+1. Download from the [Modrinth page](https://modrinth.com/plugin/best-auction)
+2. Place the file in the `plugins/` folder
+3. Restart the server
 
-## 🎮 使い方
+### From GitHub
+1. Download the latest version from [Releases](https://github.com/0x48lab/best_auction/releases)
+2. Place the file in the `plugins/` folder
+3. Restart the server
 
-### 基本コマンド
+## 🎮 Usage
+
+### Basic Commands
 ```
-/ah                          # オークションハウスを開く
-/ah sell <価格> [即決価格]      # アイテムを出品
-/ah bid <ID> <金額>           # アイテムに入札
-/ah search <キーワード>        # アイテムを検索
-/ah mail                     # メールボックスを開く
+/ah                          # Open the auction house
+/ah sell <price> [buyout]     # List an item
+/ah bid <ID> <amount>        # Bid on an item
+/ah search <keyword>         # Search for items
+/ah mail                     # Open your mailbox
 ```
 
-### 設定例
+### Configuration Example
 ```yaml
 # config.yml
 auction:
-  default_duration: 168      # 7日間（時間単位）
-  listing_fee_rate: 0.05     # 5%の手数料
+  default_duration: 168      # 7 days (in hours)
+  listing_fee_rate: 0.05     # 5% fee
   
 ui:
-  date_format: "yyyy年MM月dd日"  # 日付表示形式
+  date_format: "yyyy-MM-dd"   # Date display format
   
-language: "ja"               # 言語設定
+language: "en"               # Language setting
 
-# クラウド連携（オプション）
+# Cloud integration (optional)
 cloud:
   enabled: false
   base_url: "https://your-worker.your-subdomain.workers.dev"
@@ -72,28 +78,28 @@ cloud:
   server_id: "default-server"
 ```
 
-## ☁️ クラウド連携
+## ☁️ Cloud Integration
 
-Best Auctionは、オークションデータを外部クラウドサービスと同期する機能を提供します。これにより、複数サーバー間でのデータ共有、分析、バックアップが可能になります。
+Best Auction can synchronize auction data with external cloud services, enabling data sharing between servers, analytics, and backups.
 
-### クラウド連携機能
+### Cloud Integration Features
 
-- **リアルタイムイベント送信** - 出品、入札、落札などのイベントを即座に送信
-- **データ同期** - オークションデータの定期的な同期
-- **APIトークン認証** - セキュアな認証機構
-- **自動リトライ** - 失敗時の自動再送信
+- **Real-Time Event Reporting** - Immediately send events such as listings, bids, and sales
+- **Data Synchronization** - Periodic synchronization of auction data
+- **API Token Authentication** - Secure authentication
+- **Automatic Retries** - Automatically resend failed requests
 
-### イベントタイプ
+### Event Types
 
-1. **ITEM_LISTED** - アイテムが出品された時
-2. **BID_PLACED** - 入札が行われた時
-3. **BID_CANCELLED** - 入札がキャンセルされた時
-4. **AUCTION_CANCELLED** - オークションがキャンセルされた時
-5. **ITEM_SOLD** - アイテムが落札された時
+1. **ITEM_LISTED** - When an item is listed
+2. **BID_PLACED** - When a bid is placed
+3. **BID_CANCELLED** - When a bid is cancelled
+4. **AUCTION_CANCELLED** - When an auction is cancelled
+5. **ITEM_SOLD** - When an item is sold
 
-### データフォーマット
+### Data Format
 
-クラウドに送信されるイベントはJSON形式で、ISO 8601形式のタイムスタンプ（UTC）を含みます：
+Events sent to the cloud use JSON and include ISO 8601 timestamps (UTC):
 
 ```json
 {
@@ -113,90 +119,90 @@ Best Auctionは、オークションデータを外部クラウドサービス�
 }
 ```
 
-### クラウドコマンド
+### Cloud Commands
 
 ```
-/ah cloud status       # クラウド連携の状態を表示
-/ah cloud validate     # APIトークンの検証
-/ah cloud sync [force] # 手動でデータを同期
+/ah cloud status       # Show cloud integration status
+/ah cloud validate     # Validate the API token
+/ah cloud sync [force] # Manually synchronize data
 ```
 
-### セットアップ
+### Setup
 
-1. クラウドサービス（Cloudflare Workers等）をデプロイ
-2. APIトークンを取得
-3. `config.yml`でクラウド設定を有効化
-4. サーバーを再起動
+1. Deploy a cloud service (such as Cloudflare Workers)
+2. Obtain an API token
+3. Enable cloud settings in `config.yml`
+4. Restart the server
 
-詳細な設定手順は[CLOUD_SETUP_GUIDE.md](CLOUD_SETUP_GUIDE.md)を参照してください。
+See [CLOUD_SETUP_GUIDE.md](CLOUD_SETUP_GUIDE.md) for detailed setup instructions.
 
-## 📚 ドキュメント
+## 📚 Documentation
 
-詳細な使用方法と設定については、[PLUGIN_DOCUMENTATION.md](PLUGIN_DOCUMENTATION.md)をご覧ください。
+See [PLUGIN_DOCUMENTATION.md](PLUGIN_DOCUMENTATION.md) for detailed usage and configuration instructions.
 
-## 🔧 開発
+## 🔧 Development
 
-### ビルド
+### Build
 ```bash
 git clone https://github.com/0x48lab/best_auction.git
 cd best_auction
 ./gradlew shadowJar
 ```
 
-### 開発サーバー起動
+### Start the Development Server
 ```bash
 ./gradlew runServer
 ```
 
-### プロジェクト構造
+### Project Structure
 ```
 src/main/kotlin/com/hacklab/best_auction/
-├── Main.kt                 # メインクラス
-├── commands/              # コマンド処理
-├── managers/              # ビジネスロジック
-├── ui/                    # GUI関連
-├── utils/                 # ユーティリティ
-├── data/                  # データクラス
-└── database/              # データベース定義
+├── Main.kt                 # Main class
+├── commands/              # Command handling
+├── managers/              # Business logic
+├── ui/                    # GUI components
+├── utils/                 # Utilities
+├── data/                  # Data classes
+└── database/              # Database definitions
 ```
 
-## 🚀 デプロイメント
+## 🚀 Deployment
 
-このプロジェクトは GitHub Actions を使用して自動デプロイを行います：
+This project uses GitHub Actions for automatic deployment:
 
-1. `v*`タグをプッシュ（例：`v1.0.0`）
-2. 自動的にビルドが実行
-3. GitHub Releases にリリース作成
-4. Modrinth に自動デプロイ
+1. Push a `v*` tag (for example, `v1.0.0`)
+2. The build runs automatically
+3. A release is created on GitHub Releases
+4. The plugin is automatically deployed to Modrinth
 
-### リリース手順
+### Release Steps
 ```bash
 git tag v1.0.0
 git push origin v1.0.0
 ```
 
-## 🤝 コントリビューション
+## 🤝 Contributing
 
-1. このリポジトリをフォーク
-2. フィーチャーブランチを作成 (`git checkout -b feature/amazing-feature`)
-3. 変更をコミット (`git commit -m 'Add amazing feature'`)
-4. ブランチにプッシュ (`git push origin feature/amazing-feature`)
-5. プルリクエストを作成
+1. Fork this repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push the branch (`git push origin feature/amazing-feature`)
+5. Create a pull request
 
-## 📄 ライセンス
+## 📄 License
 
-このプロジェクトは MIT ライセンスの下で公開されています。詳細は [LICENSE](LICENSE) ファイルをご覧ください。
+This project is released under the MIT License. See [LICENSE](LICENSE) for details.
 
-## 🆘 サポート
+## 🆘 Support
 
-- 🐛 バグ報告: [GitHub Issues](https://github.com/0x48lab/best_auction/issues)
-- 💡 機能要望: [GitHub Discussions](https://github.com/0x48lab/best_auction/discussions)
-- 📧 直接連絡: プロジェクト管理者まで
+- 🐛 Bug reports: [GitHub Issues](https://github.com/0x48lab/best_auction/issues)
+- 💡 Feature requests: [GitHub Discussions](https://github.com/0x48lab/best_auction/discussions)
+- 📧 Direct contact: Contact the project maintainer
 
-## 🏆 謝辞
+## 🏆 Acknowledgments
 
-このプラグインは [Claude Code](https://claude.ai/code) の支援を受けて開発されました。
+This plugin was developed with assistance from [Claude Code](https://claude.ai/code).
 
 ---
 
-**🌟 このプラグインが役に立ったら、ぜひスターをお願いします！**
+**🌟 If you find this plugin useful, please give it a star!**

@@ -1,10 +1,10 @@
 name: best_auction
 version: '1.0-SNAPSHOT'
 main: com.hacklab.best_auction.Main
-api-version: '1.21'
+api-version: '1.21.10'
 authors: [ masafumi terazono ]
 load: STARTUP
-softdepend: [ Vault, VaultUnlocked ]
+softdepend: [ Vault, VaultUnlocked, floodgate ]
 
 commands:
   auction:

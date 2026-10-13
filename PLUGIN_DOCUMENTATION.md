@@ -1,198 +1,197 @@
-# Best Auction Plugin ドキュメント
+# Best Auction Plugin Documentation
 
-## 📋 概要
+## 📋 Overview
 
-Best AuctionはMinecraft Paper/Spigotサーバー用のオークションハウスプラグインです。プレイヤーがアイテムを出品・入札・購入できる完全な市場システムを提供します。
+Best Auction is an auction house plugin for Minecraft Paper/Spigot servers. It provides a complete marketplace where players can list, bid on, and purchase items.
 
-### 主な機能
-- 📦 アイテムの出品・入札システム
-- 💰 Vault連携による経済システム
-- 📬 メールボックスシステム
-- 🌐 多言語対応（日本語・英語）
-- ⚙️ 高度な設定機能
-- 🔍 シンプルなカテゴリ（すべて・ブロック・食品・武器装備・エンチャント・その他）
-- 🔍 キーワード検索機能
-
----
-
-## 🛠️ インストール・設定
-
-### 必要なプラグイン
-- **Paper/Spigot** 1.20.6以上
-- **Vault** （経済プラグイン連携用）
-- **経済プラグイン**（EssentialsX等）
-
-### インストール手順
-1. `best_auction-1.0-SNAPSHOT-all.jar` を `plugins/` フォルダに配置
-2. サーバーを再起動
-3. `plugins/best_auction/config.yml` で設定を調整
+### Key Features
+- 📦 Item listing and bidding system
+- 💰 Economy system with Vault integration
+- 📬 Mailbox system
+- 🌐 English interface and language resources
+- ⚙️ Advanced configuration
+- 🔍 Simple categories (All, Blocks, Food, Weapons & Equipment, Enchantments, and Others)
+- 🔍 Keyword search
 
 ---
 
-## ⚙️ 設定ファイル
+## 🛠️ Installation and Setup
 
-### config.yml 主要設定
+### Required Plugins
+- **Paper/Spigot** 1.20.6 or later
+- **Vault** (for economy plugin integration)
+- **Economy plugin** (such as EssentialsX)
+
+### Installation Steps
+1. Place `best_auction-1.0-SNAPSHOT-all.jar` in the `plugins/` folder
+2. Restart the server
+3. Adjust the settings in `plugins/best_auction/config.yml`
+
+---
+
+## ⚙️ Configuration File
+
+### Main config.yml Settings
 
 ```yaml
-# 言語設定
-language: "ja"  # ja: 日本語, en: 英語
+# Language settings
+language: "en"  # English
 
-# オークション設定
+# Auction settings
 auction:
-  default_duration: 228  # オークション期間（時間）
-  listing_fee_rate: 0.05 # 出品手数料率（5%）
-  min_listing_fee: 10    # 最小手数料
-  max_listing_fee: 1000  # 最大手数料
+  default_duration: 228  # Auction duration (hours)
+  listing_fee_rate: 0.05 # Listing fee rate (5%)
+  min_listing_fee: 10    # Minimum fee
+  max_listing_fee: 1000  # Maximum fee
 
-# 通貨設定
+# Currency settings
 currency:
-  use_vault_format: true      # Vault形式を使用
-  fallback_currency: "gil"    # フォールバック通貨名
-  currency_symbol: ""         # 通貨記号
+  use_vault_format: true      # Use Vault formatting
+  fallback_currency: "gil"    # Fallback currency name
+  currency_symbol: ""         # Currency symbol
 
-# UI設定
+# UI settings
 ui:
-  items_per_page: 45          # 1ページあたりのアイテム数
-  date_format: "yyyy年MM月dd日" # 日付表示形式
+  items_per_page: 45          # Items per page
+  date_format: "yyyy-MM-dd"   # Date display format
 
-# デバッグ設定
+# Debug settings
 debug:
-  enable_debug_commands: false # デバッグコマンド有効化
+  enable_debug_commands: false # Enable debug commands
 ```
 
-### 日付フォーマット例
+### Date Format Examples
 - `"yyyy-MM-dd"` → 2024-12-18
-- `"yyyy年MM月dd日"` → 2024年12月18日
+- `"MMMM dd, yyyy"` → December 18, 2024
 - `"MM/dd/yyyy"` → 12/18/2024
 - `"dd/MM/yyyy"` → 18/12/2024
 
 ---
 
-## 💬 コマンド一覧
+## 💬 Commands
 
-### 基本コマンド
+### Basic Commands
 
-| コマンド | 説明 | 例 |
+| Command | Description | Example |
 |---------|------|-----|
-| `/ah` | オークションハウスGUIを開く | `/ah` |
-| `/ah sell <価格> [即決価格]` | 手に持ったアイテムを出品 | `/ah sell 1000 2000` |
-| `/ah bid <ID> <金額>` | アイテムに入札 | `/ah bid 23 1500` |
-| `/ah cancel <ID>` | 出品をキャンセル | `/ah cancel 23` |
-| `/ah search <キーワード>` | アイテムを検索 | `/ah search ダイヤモンド` |
-| `/ah mail` | メールボックスを開く | `/ah mail` |
-| `/ah confirm` | 操作を確認実行 | `/ah confirm` |
-| `/ah help` | ヘルプを表示 | `/ah help` |
+| `/ah` | Open the auction house GUI | `/ah` |
+| `/ah sell <price> [buyout]` | List the item in your hand | `/ah sell 1000 2000` |
+| `/ah bid <ID> <amount>` | Bid on an item | `/ah bid 23 1500` |
+| `/ah cancel <ID>` | Cancel a listing | `/ah cancel 23` |
+| `/ah search <keyword>` | Search for items | `/ah search diamond` |
+| `/ah mail` | Open your mailbox | `/ah mail` |
+| `/ah confirm` | Confirm and execute an action | `/ah confirm` |
+| `/ah help` | Show help | `/ah help` |
 
-### 管理者コマンド
+### Administrator Commands
 
-| コマンド | 権限 | 説明 |
+| Command | Permission | Description |
 |---------|------|-----|
-| `/ah testdata [個数]` | `auction.admin` | テストデータ生成（デバッグモード時のみ） |
+| `/ah testdata [count]` | `auction.admin` | Generate test data (debug mode only) |
 
-### 金額表記について
-- **K/M/B表記対応**: `7.2K`（7,200）、`1.5M`（1,500,000）
-- **自動省略表示**: 1000以上は自動でK/M表記に変換
+### Amount Notation
+- **K/M/B notation**: `7.2K` (7,200), `1.5M` (1,500,000)
+- **Automatic abbreviation**: Amounts of 1,000 or more are automatically converted to K/M notation
 
 ---
 
-## 🎮 プレイヤー向け使い方
+## 🎮 Player Guide
 
-### 1. アイテムの出品
+### 1. Listing Items
 
-1. 出品したいアイテムを手に持つ
-2. `/ah sell <開始価格> [即決価格]` を実行
-3. 出品手数料が自動で徴収される
-4. オークション期間は設定で統一（デフォルト228時間）
+1. Hold the item you want to list
+2. Run `/ah sell <starting_price> [buyout_price]`
+3. The listing fee is collected automatically
+4. Auction duration is set globally in the configuration (228 hours by default)
 
-**例:**
+**Examples:**
 ```
-/ah sell 1000      # 1000gilから開始、即決なし
-/ah sell 1K 2.5K   # 1000gilから開始、2500gilで即決
-```
-
-### 2. 入札・購入
-
-1. `/ah` でオークションハウスを開く
-2. 気になるアイテムを左クリック
-3. 入札情報を確認して金額を入力
-4. 右クリックで即決購入（即決価格設定時）
-
-**入札画面の情報:**
-- 現在の最高入札額
-- 最低入札額
-- 即決価格（設定時）
-- 残り時間
-
-### 3. 入札管理
-
-1. `/ah` → 「入札中アイテム」をクリック
-2. **左クリック**: 入札額を変更
-3. **右クリック**: 入札をキャンセル
-
-**入札状態の表示:**
-- ✓ 最高入札中（緑色）
-- ✗ 上回られています（赤色）
-
-### 4. 検索機能
-
-```
-/ah search ダイヤモンド   # キーワード検索
-/ah search エンチャント   # 部分一致検索
+/ah sell 1000      # Start at 1,000 gil with no buyout
+/ah sell 1K 2.5K   # Start at 1,000 gil with a 2,500 gil buyout
 ```
 
-### 5. メールボックス
+### 2. Bidding and Buying
 
-- 落札したアイテム
-- 返金されたお金
-- キャンセルされたアイテム
+1. Open the auction house with `/ah`
+2. Left-click an item that interests you
+3. Review the bid information and enter an amount
+4. Right-click to buy immediately (if a buyout price is set)
 
-すべてメールボックスに送信されます。
+**Information on the bidding screen:**
+- Current highest bid
+- Minimum bid
+- Buyout price (if set)
+- Time remaining
+
+### 3. Managing Bids
+
+1. Run `/ah` → click “Your Bids”
+2. **Left-click**: Change your bid amount
+3. **Right-click**: Cancel your bid
+
+**Bid status display:**
+- ✓ Highest bidder (green)
+- ✗ You have been outbid (red)
+
+### 4. Search
+
+```
+/ah search diamond   # Keyword search
+/ah search enchant   # Partial-match search
+```
+
+### 5. Mailbox
+
+- Items you won
+- Refunded money
+- Cancelled items
+
+All of these are sent to your mailbox.
 
 ---
 
-## 🔧 管理者向け設定
+## 🔧 Administrator Settings
 
-### 1. 経済設定の調整
-
-```yaml
-auction:
-  listing_fee_rate: 0.05  # 5%の手数料
-  min_listing_fee: 10     # 最小10gil
-  max_listing_fee: 1000   # 最大1000gil
-```
-
-### 2. オークション期間の変更
+### 1. Adjusting Economy Settings
 
 ```yaml
 auction:
-  default_duration: 168   # 7日間（168時間）
-  # default_duration: 72  # 3日間
-  # default_duration: 24  # 1日間
+  listing_fee_rate: 0.05  # 5% fee
+  min_listing_fee: 10     # Minimum of 10 gil
+  max_listing_fee: 1000   # Maximum of 1,000 gil
 ```
 
-### 3. 言語の切り替え
+### 2. Changing Auction Duration
 
 ```yaml
-language: "en"  # 英語に変更
-language: "ja"  # 日本語に変更
+auction:
+  default_duration: 168   # 7 days (168 hours)
+  # default_duration: 72  # 3 days
+  # default_duration: 24  # 1 day
 ```
 
-### 4. デバッグモードの有効化
+### 3. Language Setting
+
+```yaml
+language: "en"  # Select English
+```
+
+### 4. Enabling Debug Mode
 
 ```yaml
 debug:
-  enable_debug_commands: true  # 開発環境でのみtrue
+  enable_debug_commands: true  # Set to true only in a development environment
 ```
 
 ---
 
-## 🛡️ 権限システム
+## 🛡️ Permissions
 
-### 基本権限
-- `bestauction.use` - 基本的な使用権限
-- `auction.admin` - 管理者権限（testdataコマンド等）
+### Basic Permissions
+- `bestauction.use` - Basic usage permission
+- `auction.admin` - Administrator permission (such as the testdata command)
 
-### 権限の設定例（LuckPerms）
+### Permission Configuration Example (LuckPerms)
 ```
 /lp group default permission set bestauction.use true
 /lp group admin permission set auction.admin true
@@ -200,116 +199,116 @@ debug:
 
 ---
 
-## 📊 データベース
+## 📊 Database
 
-### SQLiteテーブル構造
+### SQLite Table Structure
 
-**AuctionItems（オークションアイテム）**
-- ID、出品者、アイテムデータ、価格、期限など
+**AuctionItems (auction items)**
+- ID, seller, item data, price, expiration, etc.
 
-**Bids（入札）**
-- 入札者、入札額、作成日時など
+**Bids (bids)**
+- Bidder, bid amount, creation time, etc.
 
-**MailBox（メール）**
-- 受信者、アイテム、理由、日時など
+**MailBox (mail)**
+- Recipient, item, reason, timestamp, etc.
 
-**設定関連**
-- プレイヤー言語設定
-- その他設定データ
+**Settings**
+- Player language settings
+- Other configuration data
 
 ---
 
-## 🔧 トラブルシューティング
+## 🔧 Troubleshooting
 
-### よくある問題
+### Common Problems
 
-**Q: オークションハウスが開かない**
-A: Vaultと経済プラグインがインストールされているか確認
+**Q: The auction house does not open**
+A: Check that Vault and an economy plugin are installed
 
-**Q: 通貨表示がおかしい**
-A: `config.yml`の`currency`設定を確認
+**Q: The currency display looks wrong**
+A: Check the `currency` settings in `config.yml`
 
-**Q: 日付表示を変更したい**
-A: `ui.date_format`を変更してサーバー再起動
+**Q: I want to change the date display**
+A: Change `ui.date_format` and restart the server
 
-**Q: testdataコマンドが使えない**
-A: `debug.enable_debug_commands: true`に設定
+**Q: I cannot use the testdata command**
+A: Set `debug.enable_debug_commands: true`
 
-### ログの確認
+### Checking Logs
 ```
 tail -f logs/latest.log | grep "best_auction"
 ```
 
 ---
 
-## 🚀 開発者向け情報
+## 🚀 Developer Information
 
-### ビルド方法
+### Building
 ```bash
-./gradlew build           # プロジェクトをビルド
-./gradlew shadowJar       # Fat JARを生成
-./gradlew runServer       # 開発サーバー起動
+./gradlew build           # Build the project
+./gradlew shadowJar       # Generate a fat JAR
+./gradlew runServer       # Start the development server
 ```
 
-### プロジェクト構造
+### Project Structure
 ```
 src/main/kotlin/com/hacklab/best_auction/
-├── Main.kt                 # メインクラス
-├── commands/              # コマンド処理
-├── managers/              # ビジネスロジック
-├── ui/                    # GUI関連
-├── utils/                 # ユーティリティ
-├── data/                  # データクラス
-└── database/              # データベース定義
+├── Main.kt                 # Main class
+├── commands/              # Command handling
+├── managers/              # Business logic
+├── ui/                    # GUI components
+├── utils/                 # Utilities
+├── data/                  # Data classes
+└── database/              # Database definitions
 ```
 
-### 技術スタック
+### Technology Stack
 - **Kotlin** 1.9.24
 - **Gradle** with Kotlin DSL
 - **PaperMC API** 1.20.6
 - **Jetbrains Exposed** ORM
-- **Vault API** 経済連携
+- **Vault API** economy integration
 
 ---
 
-## 📝 更新履歴
+## 📝 Changelog
 
 ### v1.0.0
-- 基本的なオークション機能
-- 入札システム
-- メールボックス
-- 多言語対応
+- Basic auction functionality
+- Bidding system
+- Mailbox
+- Multi-language support
 
-### v1.1.0（最新）
-- 設定可能な日付フォーマット
-- 設定可能なオークション期間
-- 残り時間表示機能
-- デバッグモード制御
-- K/M/B表記対応
-- Vault通貨連携強化
+### v1.1.0 (Latest)
+- Configurable date format
+- Configurable auction duration
+- Time remaining display
+- Debug mode controls
+- K/M/B notation support
+- Improved Vault currency integration
 
 ---
 
-## 🆘 サポート
+## 🆘 Support
 
-### 問題報告
+### Reporting Problems
 - [GitHub Issues](https://github.com/your-repo/best_auction/issues)
-- プラグイン作者まで連絡
+- Contact the plugin author
 
-### 設定ファイルの場所
+### Configuration File Locations
 - `plugins/best_auction/config.yml`
 - `plugins/best_auction/lang/`
 
-### バックアップ推奨
-- データベースファイル: `plugins/best_auction/database.db`
-- 設定ファイル: `plugins/best_auction/config.yml`
+### Recommended Backups
+- Database file: `plugins/best_auction/database.db`
+- Configuration file: `plugins/best_auction/config.yml`
 
 ---
 
-## 📄 ライセンス
+## 📄 License
 
-MIT License - 詳細は LICENSE ファイルを参照
+MIT License - See the LICENSE file for details
 
 ---
 
-*このドキュメントは Best Auction Plugin v1.1.0 に基づいています。最新情報は公式リポジトリをご確認ください。*
+*This documentation is based on Best Auction Plugin v1.1.0. Check the official repository for the latest information.*

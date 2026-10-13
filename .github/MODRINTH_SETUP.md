@@ -1,133 +1,133 @@
 # Modrinth Auto-Deploy Setup Guide
 
-このガイドでは、GitHub ActionsからModrinthへの自動デプロイを設定する方法を説明します。
+This guide explains how to configure automatic deployment from GitHub Actions to Modrinth.
 
-## 📋 必要な設定
+## 📋 Required Configuration
 
-### 1. Modrinthプロジェクトの作成
+### 1. Create a Modrinth Project
 
-1. [Modrinth](https://modrinth.com) にアカウントを作成
-2. 新しいプロジェクトを作成
-3. プロジェクトIDをメモ（例：`best-auction`）
+1. Create an account on [Modrinth](https://modrinth.com)
+2. Create a new project
+3. Note the project ID (for example, `best-auction`)
 
-### 2. Modrinth APIトークンの取得
+### 2. Obtain a Modrinth API Token
 
-1. [Modrinth Settings](https://modrinth.com/settings/pats) にアクセス
-2. 「Create a PAT」をクリック
-3. 以下の権限を付与：
-   - `CREATE_VERSION` - 新しいバージョンの作成
-   - `EDIT_DETAILS` - プロジェクト詳細の編集
-4. 生成されたトークンをコピー
+1. Visit [Modrinth Settings](https://modrinth.com/settings/pats)
+2. Click “Create a PAT”
+3. Grant the following permissions:
+   - `CREATE_VERSION` - Create new versions
+   - `EDIT_DETAILS` - Edit project details
+4. Copy the generated token
 
-### 3. GitHub Secretsの設定
+### 3. Configure GitHub Secrets
 
-GitHubリポジトリの Settings > Secrets and variables > Actions で以下を追加：
+Add the following under Settings > Secrets and variables > Actions in your GitHub repository:
 
 ```
-MODRINTH_PAT=<あなたのModrinthトークン>          # ✅ 設定済み
-MODRINTH_PROJECT_ID=<あなたのプロジェクトID>      # 📝 要設定
+MODRINTH_PAT=<your_Modrinth_token>          # ✅ Already configured
+MODRINTH_PROJECT_ID=<your_project_ID>      # 📝 Configuration required
 ```
 
-**注意**: `MODRINTH_PAT` は既に設定済みです。`MODRINTH_PROJECT_ID` の設定のみ必要です。
+**Note**: `MODRINTH_PAT` is already configured. Only `MODRINTH_PROJECT_ID` needs to be set.
 
-### 4. ワークフローファイルの調整
+### 4. Adjust the Workflow File
 
-`.github/workflows/release.yml` の以下の部分を調整：
+Adjust the following section of `.github/workflows/release.yml`:
 
 ```yaml
 # Modrinth configuration
-modrinth-id: ${{ secrets.MODRINTH_PROJECT_ID }}  # あなたのプロジェクトID
+modrinth-id: ${{ secrets.MODRINTH_PROJECT_ID }}  # Your project ID
 modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
 
-# Game versions（サポートするバージョンを調整）
+# Game versions (adjust the supported versions)
 game-versions: |
   1.20.6
   1.20.5
   1.20.4
   1.20.1
 
-# Mod loaders（サポートするプラットフォームを調整）
+# Mod loaders (adjust the supported platforms)
 loaders: |
   paper
   spigot
   bukkit
 ```
 
-## 🚀 デプロイ手順
+## 🚀 Deployment Steps
 
-### 自動デプロイ
-vタグをプッシュすると自動でデプロイされます：
+### Automatic Deployment
+Deployment runs automatically when you push a v tag:
 
 ```bash
-# 例：バージョン1.0.0をリリース
+# Example: Release version 1.0.0
 git tag v1.0.0
 git push origin v1.0.0
 ```
 
-### 手動確認項目
+### Manual Checklist
 
-デプロイ前に以下を確認：
+Before deploying, check the following:
 
-- [ ] `build.gradle.kts`のバージョンが正しい
-- [ ] `plugin.yml`の情報が最新
-- [ ] ドキュメントが更新されている
-- [ ] テストが通る（`./gradlew test`）
+- [ ] The version in `build.gradle.kts` is correct
+- [ ] The information in `plugin.yml` is up to date
+- [ ] Documentation is updated
+- [ ] Tests pass (`./gradlew test`)
 
-## 📝 Modrinthプロジェクト設定
+## 📝 Modrinth Project Settings
 
-### プロジェクト情報
-- **名前**: Best Auction
-- **説明**: Complete auction house plugin for Minecraft servers
-- **カテゴリ**: Economy, Utility
-- **ライセンス**: MIT
+### Project Information
+- **Name**: Best Auction
+- **Description**: Complete auction house plugin for Minecraft servers
+- **Categories**: Economy, Utility
+- **License**: MIT
 - **Issues URL**: `https://github.com/0x48lab/best_auction/issues`
 - **Source URL**: `https://github.com/0x48lab/best_auction`
 - **Wiki URL**: `https://github.com/0x48lab/best_auction/blob/main/PLUGIN_DOCUMENTATION.md`
 
-### ギャラリー画像
-以下のスクリーンショットを追加することを推奨：
-- オークションハウスのメインGUI
-- 入札画面
-- 設定ファイルの例
+### Gallery Images
+Recommended screenshots:
+- Main auction house GUI
+- Bidding screen
+- Configuration file example
 
-## 🔧 トラブルシューティング
+## 🔧 Troubleshooting
 
-### よくある問題
+### Common Problems
 
-**1. デプロイが失敗する**
-- Modrinth APIトークンが正しく設定されているか確認
-- プロジェクトIDが正しいか確認
-- 権限が適切に設定されているか確認
+**1. Deployment Fails**
+- Check that the Modrinth API token is configured correctly
+- Check that the project ID is correct
+- Check that permissions are configured appropriately
 
-**2. JARファイルが見つからない**
-- Gradleビルドが成功しているか確認
-- ファイルパスが正しいか確認（`build/libs/`）
+**2. JAR File Not Found**
+- Check that the Gradle build succeeded
+- Check that the file path is correct (`build/libs/`)
 
-**3. バージョンが重複している**
-- 同じバージョン番号で複数回デプロイしていないか確認
-- タグが正しく設定されているか確認
+**3. Duplicate Version**
+- Check that the same version number has not been deployed more than once
+- Check that the tag is set correctly
 
-### ログの確認
+### Checking Logs
 
-GitHub Actions の実行ログでエラーの詳細を確認できます：
-1. GitHub リポジトリの「Actions」タブ
-2. 失敗したワークフローをクリック
-3. 「deploy」ジョブのログを確認
+You can find error details in the GitHub Actions execution logs:
+1. Open the “Actions” tab in the GitHub repository
+2. Click the failed workflow
+3. Check the logs for the “deploy” job
 
-## 📊 メトリクス
+## 📊 Metrics
 
-デプロイ後、以下のメトリクスを確認：
-- ダウンロード数
-- プロジェクトのフォロワー数
-- バージョン別の利用状況
+After deployment, check the following metrics:
+- Download count
+- Project follower count
+- Usage by version
 
-Modrinthのプロジェクトダッシュボードでこれらの情報を確認できます。
+You can find this information in the Modrinth project dashboard.
 
-## 🔄 更新サイクル
+## 🔄 Update Cycle
 
-推奨される更新サイクル：
-- **パッチ版**（v1.0.1）: バグ修正
-- **マイナー版**（v1.1.0）: 新機能追加
-- **メジャー版**（v2.0.0）: 破壊的変更
+Recommended update cycle:
+- **Patch release** (v1.0.1): Bug fixes
+- **Minor release** (v1.1.0): New features
+- **Major release** (v2.0.0): Breaking changes
 
-各リリースでは適切なchangelogを提供し、ユーザーに変更内容を明確に伝えましょう。
+Provide an appropriate changelog with each release so users clearly understand the changes.

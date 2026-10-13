@@ -1,53 +1,53 @@
-# Quickstart: オークションカテゴリの簡素化
+# Quickstart: Simplify Auction Categories
 
 **Date**: 2026-03-24
 **Feature**: 001-simplify-auction-categories
 
-## 変更対象ファイル一覧
+## Files to Update
 
-### 必須変更
+### Required Changes
 
 1. **`src/main/kotlin/com/hacklab/best_auction/data/AuctionData.kt`**
-   - AuctionCategory enumの値を10→6に変更
-   - fromItemStack()のロジック書き換え（エンチャント判定を最優先に）
-   - 旧カテゴリ名マッピング用のcompanion objectメソッド追加
+   - Change AuctionCategory enum from ten values to six
+   - Rewrite fromItemStack() logic (give enchantment detection highest priority)
+   - Add a companion object method to map legacy category names
 
 2. **`src/main/kotlin/com/hacklab/best_auction/ui/AuctionUI.kt`**
-   - openMainUI(): カテゴリ一覧 → アイテム一覧 + カテゴリフィルタバー
-   - openCategoryUI(): 新カテゴリ対応
-   - getCategoryDisplayName(): 新カテゴリの表示名マッピング
-   - createCategoryItem(): 新カテゴリのアイコン生成
-   - handleMainMenuClick(): クリック処理をカテゴリフィルタ対応に変更
-   - handleCategoryClick(): 必要に応じて調整
+   - openMainUI(): Category list → item list with category filter bar
+   - openCategoryUI(): Support new categories
+   - getCategoryDisplayName(): Map display names for new categories
+   - createCategoryItem(): Generate icons for new categories
+   - handleMainMenuClick(): Update click handling for category filters
+   - handleCategoryClick(): Adjust as needed
 
 3. **`src/main/kotlin/com/hacklab/best_auction/managers/AuctionManager.kt`**
-   - getActiveListings(): カテゴリフィルタを複数旧カテゴリ名対応に
-   - ソート順をcreatedAt DESC（新着順）に変更
+   - getActiveListings(): Support multiple legacy category names in category filters
+   - Change sort order to createdAt DESC (newest first)
 
 4. **`src/main/resources/lang/en.yml`**
-   - categoryセクションの値を新カテゴリに更新
+   - Update the category section with new category values
 
 5. **`src/main/resources/lang/ja.yml`**
-   - categoryセクションの値を新カテゴリに更新
+   - Update the category section with new category values
 
-### 変更不要
+### No Changes Required
 
-- `Tables.kt` - スキーマ変更なし
-- `DatabaseManager.kt` - DB初期化ロジック変更なし
-- `BidHandler.kt` - 入札処理はカテゴリに依存しない
-- `SearchHandler.kt` - 検索はアイテム名ベースでカテゴリに依存しない
+- `Tables.kt` - No schema changes
+- `DatabaseManager.kt` - No database initialization changes
+- `BidHandler.kt` - Bidding does not depend on categories
+- `SearchHandler.kt` - Search is based on item names and does not depend on categories
 
-## 実装順序
+## Implementation Order
 
-1. AuctionCategory enum変更（データ層）
-2. AuctionManager.getActiveListings()更新（ビジネスロジック層）
-3. 言語ファイル更新（リソース層）
-4. AuctionUI全体更新（UI層）
+1. Update AuctionCategory enum (data layer)
+2. Update AuctionManager.getActiveListings() (business logic layer)
+3. Update language files (resource layer)
+4. Update AuctionUI (UI layer)
 
-## ビルド・テスト
+## Build and Test
 
 ```bash
 ./gradlew build
-# 生成物: build/libs/best_auction-*-all.jar
-# サーバーのplugins/に配置してテスト
+# Output: build/libs/best_auction-*-all.jar
+# Place in the server's plugins/ directory and test
 ```

@@ -4,76 +4,76 @@ import org.bukkit.OfflinePlayer
 import org.bukkit.entity.Player
 
 /**
- * 経済システムの抽象インターフェース
- * 内蔵経済またはVault経済のどちらでも使用可能
+ * Abstract interface for the economy system
+ * Supports both internal and Vault economies
  */
 interface EconomyProvider {
     /**
-     * 経済プロバイダーの名前
+     * Economy provider name
      */
     val name: String
 
     /**
-     * 通貨名（複数形）
+     * Currency name (plural)
      */
     fun currencyNamePlural(): String
 
     /**
-     * 金額をフォーマットして表示用文字列を返す
+     * Format an amount and return its display string
      */
     fun format(amount: Double): String
 
     /**
-     * プレイヤーが指定金額以上の残高を持っているか確認
+     * Check whether a player has at least the specified balance
      */
     fun has(player: Player, amount: Double): Boolean
 
     /**
-     * オフラインプレイヤーが指定金額以上の残高を持っているか確認
+     * Check whether an offline player has at least the specified balance
      */
     fun has(player: OfflinePlayer, amount: Double): Boolean
 
     /**
-     * プレイヤーのアカウントが存在するか確認
+     * Check whether a player account exists
      */
     fun hasAccount(player: Player): Boolean
 
     /**
-     * オフラインプレイヤーのアカウントが存在するか確認
+     * Check whether an offline player account exists
      */
     fun hasAccount(player: OfflinePlayer): Boolean
 
     /**
-     * プレイヤーから金額を引き出す
-     * @return 成功した場合true
+     * Withdraw money from a player
+     * @return true on success
      */
     fun withdrawPlayer(player: Player, amount: Double): Boolean
 
     /**
-     * オフラインプレイヤーから金額を引き出す
-     * @return 成功した場合true
+     * Withdraw money from an offline player
+     * @return true on success
      */
     fun withdrawPlayer(player: OfflinePlayer, amount: Double): Boolean
 
     /**
-     * プレイヤーに金額を入金する
-     * @return 成功した場合true
+     * Deposit money into a player account
+     * @return true on success
      */
     fun depositPlayer(player: Player, amount: Double): Boolean
 
     /**
-     * オフラインプレイヤーに金額を入金する
-     * @return 成功した場合true
+     * Deposit money into an offline player account
+     * @return true on success
      */
     fun depositPlayer(player: OfflinePlayer, amount: Double): Boolean
 
     /**
-     * プレイヤーの残高を取得
+     * Get a player's balance
      */
     fun getBalance(player: Player): Double
 
     /**
-     * オフラインプレイヤーの残高を取得
+     * Get an offline player's balance
      */
     fun getBalance(player: OfflinePlayer): Double
 }

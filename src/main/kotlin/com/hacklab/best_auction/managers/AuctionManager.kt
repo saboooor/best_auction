@@ -1,5 +1,6 @@
 package com.hacklab.best_auction.managers
 
+import com.hacklab.best_auction.utils.AuctionSearch
 import com.hacklab.best_auction.Main
 import com.hacklab.best_auction.data.AuctionCategory
 import com.hacklab.best_auction.data.AuctionEventData
@@ -287,8 +288,7 @@ class AuctionManager(private val plugin: Main, private val economy: EconomyProvi
                 .mapNotNull { row ->
                     val item = ItemUtils.deserializeItemStack(row[AuctionItems.itemData])
                     if (item != null) {
-                        val itemName = item.itemMeta?.displayName ?: item.type.name
-                        if (searchTerm == null || itemName.contains(searchTerm, ignoreCase = true)) {
+                        if (searchTerm == null || AuctionSearch.matches(item, searchTerm)) {
                             AuctionItem(
                                 id = row[AuctionItems.id].value,
                                 sellerUuid = UUID.fromString(row[AuctionItems.sellerUuid]),

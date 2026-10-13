@@ -40,7 +40,7 @@ CURSEFORGE_PROJECT_ID = your_project_id_here
 
 ### Project Details
 - **Name**: Best Auction
-- **Summary**: Complete auction house plugin for Minecraft Paper/Spigot servers. Features bidding, buy-it-now, mail delivery, multi-language support, advanced search, and Vault economy integration. Real-time countdown and flexible configuration included.
+- **Summary**: Complete auction house plugin for Minecraft Paper/Spigot servers. Features bidding, buy-it-now, mail delivery, English language support, advanced search, and Vault economy integration. Real-time countdown and flexible configuration included.
 - **Description**: Use the content from `CURSEFORGE_DESCRIPTION.md`
 - **Category**: Bukkit Plugins
 - **Game**: Minecraft

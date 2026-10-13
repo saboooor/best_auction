@@ -63,7 +63,7 @@ object CloudSyncStatus : IntIdTable("cloud_sync_status") {
 }
 
 /**
- * 内蔵経済システム用の残高テーブル
+ * Balance table for the internal economy system
  */
 object PlayerBalances : IntIdTable("player_balances") {
     val playerUuid = varchar("player_uuid", 36).uniqueIndex()

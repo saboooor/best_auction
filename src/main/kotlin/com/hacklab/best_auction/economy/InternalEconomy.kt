@@ -12,8 +12,8 @@ import java.time.LocalDateTime
 import java.util.*
 
 /**
- * 内蔵経済システム
- * SQLiteに残高を保存して管理する
+ * Internal economy system
+ * Stores and manages balances in SQLite
  */
 class InternalEconomy(private val plugin: Main) : EconomyProvider {
 
@@ -119,7 +119,7 @@ class InternalEconomy(private val plugin: Main) : EconomyProvider {
     }
 
     /**
-     * プレイヤーの残高を設定する（管理者用）
+     * Set a player's balance (for administrators)
      */
     fun setBalance(player: OfflinePlayer, amount: Long): Boolean {
         val uuid = player.uniqueId.toString()
@@ -136,7 +136,7 @@ class InternalEconomy(private val plugin: Main) : EconomyProvider {
     }
 
     /**
-     * アカウントが存在しない場合は作成する
+     * Create an account if it does not exist
      */
     private fun ensureAccount(player: OfflinePlayer) {
         val uuid = player.uniqueId.toString()

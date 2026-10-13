@@ -1,40 +1,40 @@
-# 🎨 Best Auction - アイコンアセット
+# 🎨 Best Auction - Icon Assets
 
-## 📁 ファイル構成
+## 📁 File Structure
 
 ```
 assets/
-├── icon.svg           # ベクター版（編集用）
-├── icon-512.png       # Modrinth用高解像度
-├── icon-128.png       # GitHub用標準
-├── icon-64.png        # 小サイズ用
-└── icon-32.png        # ファビコン用
+├── icon.svg           # Vector version (for editing)
+├── icon-512.png       # High resolution for Modrinth
+├── icon-128.png       # Standard size for GitHub
+├── icon-64.png        # Small size
+└── icon-32.png        # Favicon
 ```
 
-## 🎨 デザイン仕様
+## 🎨 Design Specifications
 
-### カラーパレット
-- **背景**: 濃紺→紫のグラデーション (#1a237e → #4a148c)
-- **ダイヤモンド**: 水色グラデーション (#4dd0e1 → #0097a7)
-- **ハンマー**: ゴールドグラデーション (#ffd54f → #ffb300)
-- **コイン**: ゴールド (#ffd700)
-- **ハイライト**: ホワイト (#ffffff)
+### Color Palette
+- **Background**: Dark blue to purple gradient (#1a237e → #4a148c)
+- **Diamond**: Cyan gradient (#4dd0e1 → #0097a7)
+- **Hammer**: Gold gradient (#ffd54f → #ffb300)
+- **Coins**: Gold (#ffd700)
+- **Highlights**: White (#ffffff)
 
-### デザイン要素
-1. **メインダイヤモンド**: Minecraftスタイルの3Dダイヤモンド
-2. **オークションハンマー**: 右上に配置された金色のハンマー
-3. **通貨コイン**: 複数通貨対応を示すコイン ($、¥、€)
-4. **スパークル効果**: 高級感を演出する光る粒子
-5. **テキスト**: "AUCTION" の文字（オプション）
+### Design Elements
+1. **Main diamond**: Minecraft-style 3D diamond
+2. **Auction hammer**: Golden hammer in the top right
+3. **Currency coins**: Coins indicating support for multiple currencies ($, ¥, €)
+4. **Sparkle effect**: Glowing particles for a premium appearance
+5. **Text**: "AUCTION" lettering (optional)
 
-## 🖼️ PNG変換方法
+## 🖼️ Converting to PNG
 
-### オプション1: オンラインツール
-1. [Convertio](https://convertio.co/svg-png/) でSVGをアップロード
-2. サイズを512x512に設定
-3. PNGでダウンロード
+### Option 1: Online Tools
+1. Upload the SVG to [Convertio](https://convertio.co/svg-png/)
+2. Set the size to 512x512
+3. Download as PNG
 
-### オプション2: コマンドライン (ImageMagick)
+### Option 2: Command Line (ImageMagick)
 ```bash
 # 512x512
 magick icon.svg -resize 512x512 icon-512.png
@@ -49,7 +49,7 @@ magick icon.svg -resize 64x64 icon-64.png
 magick icon.svg -resize 32x32 icon-32.png
 ```
 
-### オプション3: Inkscape
+### Option 3: Inkscape
 ```bash
 # 512x512
 inkscape icon.svg --export-png=icon-512.png --export-width=512 --export-height=512
@@ -58,34 +58,34 @@ inkscape icon.svg --export-png=icon-512.png --export-width=512 --export-height=5
 inkscape icon.svg --export-png=icon-128.png --export-width=128 --export-height=128
 ```
 
-## 📋 使用場所
+## 📋 Usage
 
 ### Modrinth
-- **プロジェクトアイコン**: icon-512.png
-- **ギャラリー**: 複数サイズ対応
+- **Project icon**: icon-512.png
+- **Gallery**: Multiple sizes supported
 
 ### GitHub
-- **リポジトリアイコン**: icon-128.png
-- **READMEバッジ**: icon-64.png
+- **Repository icon**: icon-128.png
+- **README badge**: icon-64.png
 
-### プラグイン内
-- **GUIアイコン**: icon-32.png
-- **通知アイコン**: icon-64.png
+### Inside the Plugin
+- **GUI icon**: icon-32.png
+- **Notification icon**: icon-64.png
 
-## 🎯 アイコンの特徴
+## 🎯 Icon Features
 
-1. **視認性**: 小さなサイズでも認識しやすいシンプルなデザイン
-2. **Minecraftらしさ**: ダイヤモンドとピクセルアート風の表現
-3. **オークション要素**: ハンマーと通貨で機能を明確に表現
-4. **プロフェッショナル**: 信頼性を感じられる高級感のある色合い
-5. **国際性**: 複数通貨表示で多言語対応をアピール
+1. **Visibility**: Simple design that is recognizable even at small sizes
+2. **Minecraft identity**: Diamond and pixel art styling
+3. **Auction elements**: Hammer and currency clearly communicate functionality
+4. **Professional appearance**: Premium colors that convey reliability
+5. **International appeal**: Multiple currencies highlight multi-language support
 
-## 🔧 編集方法
+## 🔧 Editing
 
-SVGファイルは以下で編集可能：
-- **Figma**: ブラウザベースのデザインツール
-- **Inkscape**: 無料のベクターエディタ
-- **Adobe Illustrator**: プロフェッショナル版
-- **VS Code**: SVG直接編集
+The SVG file can be edited with:
+- **Figma**: Browser-based design tool
+- **Inkscape**: Free vector editor
+- **Adobe Illustrator**: Professional option
+- **VS Code**: Direct SVG editing
 
-色やサイズの調整は、SVGファイル内の該当部分を変更してから再出力してください。
+To adjust colors or sizes, edit the relevant parts of the SVG file and export it again.
