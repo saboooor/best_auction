@@ -147,32 +147,65 @@ class AuctionManager(private val plugin: Main, private val economy: EconomyProvi
                 return@transaction false
             }
             
-            if (!economy.has(player, bidAmount.toDouble())) {
-                player.sendMessage("§c${plugin.langManager.getMessage(player, "auction.not_enough_money")}")
-                return@transaction false
-            }
-            
             val isBuyout = buyoutPrice != null && bidAmount >= buyoutPrice
             
             if (isBuyout) {
-                completeSale(itemId, player.uniqueId, player.name, buyoutPrice!!)
-                player.sendMessage("§a${plugin.langManager.getMessage(player, "auction.buyout_success")}")
+                // Check if buyer has an existing bid on this item
+                val existingBid = Bids.select { 
+                    (Bids.auctionItem eq itemId) and 
+                    (Bids.bidderUuid eq player.uniqueId.toString())
+                }.orderBy(Bids.createdAt to SortOrder.DESC).firstOrNull()
                 
-                // Send cloud event for buyout (treated as ITEM_SOLD)
-                val sellerUuid = auctionItem[AuctionItems.sellerUuid]
-                val sellerName = auctionItem[AuctionItems.sellerName]
-                val eventData = AuctionEventData.createItemSoldEvent(
-                    serverId = plugin.config.getString("cloud.server_id", "default-server")!!,
-                    auctionId = itemId,
-                    sellerUuid = sellerUuid,
-                    sellerName = sellerName,
-                    buyerUuid = player.uniqueId.toString(),
-                    buyerName = player.name,
-                    finalPrice = buyoutPrice,
-                    wasBuyout = true
-                )
-                cloudEventManager.sendEvent(eventData)
+                val existingBidAmount = existingBid?.get(Bids.bidAmount) ?: 0L
+                val amountToPay = (buyoutPrice!! - existingBidAmount).coerceAtLeast(0L)
+                
+                if (!economy.has(player, amountToPay.toDouble())) {
+                    player.sendMessage("§c${plugin.langManager.getMessage(player, "auction.not_enough_money")}")
+                    return@transaction false
+                }
+                
+                if (amountToPay > 0 && !economy.withdrawPlayer(player, amountToPay.toDouble())) {
+                    player.sendMessage("§c${plugin.langManager.getMessage(player, "auction.withdraw_failed")}")
+                    return@transaction false
+                }
+                
+                // Refund other bidders on this auction
+                val otherBids = Bids.select { 
+                    (Bids.auctionItem eq itemId) and 
+                    (Bids.bidderUuid neq player.uniqueId.toString())
+                }.map { 
+                    Triple(
+                        UUID.fromString(it[Bids.bidderUuid]),
+                        it[Bids.bidderName],
+                        it[Bids.bidAmount]
+                    )
+                }
+                
+                otherBids.forEach { (bidderUuid, _, amount) ->
+                    val offlinePlayer = plugin.server.getOfflinePlayer(bidderUuid)
+                    if (economy.hasAccount(offlinePlayer)) {
+                        economy.depositPlayer(offlinePlayer, amount.toDouble())
+                    }
+                    val onlineBidder = plugin.server.getPlayer(bidderUuid)
+                    if (onlineBidder?.isOnline == true) {
+                        val item = ItemUtils.deserializeItemStack(auctionItem[AuctionItems.itemData])
+                        val displayName = item?.itemMeta?.displayName ?: item?.type?.name ?: "Item"
+                        onlineBidder.sendMessage(
+                            plugin.langManager.getMessage(onlineBidder, "auction.outbid", displayName)
+                        )
+                    }
+                }
+                
+                // Clear all bids for this auction item
+                Bids.deleteWhere { Bids.auctionItem eq itemId }
+                
+                completeSale(itemId, player.uniqueId, player.name, buyoutPrice, wasBuyout = true)
+                player.sendMessage("§a${plugin.langManager.getMessage(player, "auction.buyout_success")}")
             } else {
+                if (!economy.has(player, bidAmount.toDouble())) {
+                    player.sendMessage("§c${plugin.langManager.getMessage(player, "auction.not_enough_money")}")
+                    return@transaction false
+                }
                 // Remove any existing bid from this player first
                 val existingBid = Bids.select { 
                     (Bids.auctionItem eq itemId) and 
@@ -339,7 +372,7 @@ class AuctionManager(private val plugin: Main, private val economy: EconomyProvi
         }
     }
     
-    private fun completeSale(itemId: Int, buyerUuid: UUID, buyerName: String, price: Long) {
+    private fun completeSale(itemId: Int, buyerUuid: UUID, buyerName: String, price: Long, wasBuyout: Boolean = false) {
         transaction {
             val auctionItem = AuctionItems.select { AuctionItems.id eq itemId }.single()
             val sellerUuid = UUID.fromString(auctionItem[AuctionItems.sellerUuid])
@@ -371,7 +404,7 @@ class AuctionManager(private val plugin: Main, private val economy: EconomyProvi
                 buyerUuid = buyerUuid.toString(),
                 buyerName = buyerName,
                 finalPrice = price,
-                wasBuyout = false
+                wasBuyout = wasBuyout
             )
             cloudEventManager.sendEvent(eventData)
         }

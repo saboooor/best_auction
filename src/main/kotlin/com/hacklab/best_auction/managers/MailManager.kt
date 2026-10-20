@@ -68,8 +68,20 @@ class MailManager(private val plugin: Main) {
                 return@transaction false
             }
 
+            if (!canFitItem(player, item)) {
+                player.sendMessage("§cInventory full! Clear some space and try again.")
+                return@transaction false
+            }
+
             val leftover = player.inventory.addItem(item)
             if (leftover.isNotEmpty()) {
+                val leftoverAmount = leftover.values.sumOf { it.amount }
+                if (leftoverAmount < item.amount) {
+                    val remainingItem = item.clone().apply { amount = leftoverAmount }
+                    MailBox.update({ MailBox.id eq mailId }) {
+                        it[itemData] = ItemUtils.serializeItemStack(remainingItem)
+                    }
+                }
                 player.sendMessage("§cInventory full! Clear some space and try again.")
                 return@transaction false
             }
@@ -81,6 +93,21 @@ class MailManager(private val plugin: Main) {
             player.sendMessage("§aItem collected!")
             true
         }
+    }
+
+    private fun canFitItem(player: Player, item: ItemStack): Boolean {
+        if (item.type.isAir || item.amount <= 0) return true
+        val maxStack = minOf(item.maxStackSize, player.inventory.maxStackSize)
+        var space = 0
+        for (slot in player.inventory.storageContents) {
+            if (slot == null || slot.type.isAir) {
+                space += maxStack
+            } else if (slot.isSimilar(item)) {
+                space += (maxStack - slot.amount).coerceAtLeast(0)
+            }
+            if (space >= item.amount) return true
+        }
+        return false
     }
 
     fun openMailBox(player: Player) {
